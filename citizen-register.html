@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register as Citizen - Living Lens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Iosevka+Charon:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+  </head>
+  <body>
+    <header id="navbar"></header>
+
+    <main class="page-wrapper">
+      <div class="auth-panel-container" style="max-width: 680px;">
+        <section class="panel">
+          <header class="panel-header">
+            <h2>Register as Citizen</h2>
+          </header>
+
+          <div class="panel-body">
+            <a href="citizen-login.html" class="auth-header-link">Already have an account? Sign in</a>
+
+            <form id="citizen-register-form" novalidate>
+              <div class="form-group">
+                <label for="reg-username" class="form-label">Username</label>
+                <input
+                  type="text"
+                  id="reg-username"
+                  name="username"
+                  class="pill-input"
+                  placeholder="e.g. janesmith"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="reg-email" class="form-label">Email Address</label>
+                <input
+                  type="email"
+                  id="reg-email"
+                  name="email"
+                  class="pill-input"
+                  placeholder="jane.smith@example.org"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="reg-phone" class="form-label">Phone number</label>
+                <input
+                  type="tel"
+                  id="reg-phone"
+                  name="phone"
+                  class="pill-input"
+                  placeholder="+44 7911 123456"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="reg-password" class="form-label">Password</label>
+                <input
+                  type="password"
+                  id="reg-password"
+                  name="password"
+                  class="pill-input"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="reg-zoo" class="form-label">Nearest Zoo</label>
+                <div class="select-wrapper">
+                  <select id="reg-zoo" name="nearestZoo" class="pill-input" required>
+                    <option value="" disabled selected>Select nearest zoo...</option>
+                    <option value="ZOO-LON-01">Metropolitan City Zoological Gardens (London)</option>
+                    <option value="ZOO-SGP-02">Central Wildlife Conservation Park</option>
+                    <option value="ZOO-SDG-03">Highland Biosphere &amp; Safari Sanctuary</option>
+                    <option value="ZOO-BER-04">Riverside Zoological Park</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="reg-location" class="form-label">Location / City / District</label>
+                <input
+                  type="text"
+                  id="reg-location"
+                  name="location"
+                  class="pill-input"
+                  placeholder="e.g. Camden, Greater London"
+                  required
+                />
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="reg-lat" class="form-label">Latitude</label>
+                  <input
+                    type="text"
+                    id="reg-lat"
+                    name="latitude"
+                    class="pill-input"
+                    value="51.5355"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="reg-lng" class="form-label">Longitude</label>
+                  <input
+                    type="text"
+                    id="reg-lng"
+                    name="longitude"
+                    class="pill-input"
+                    value="-0.1550"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="auth-submit-row">
+                <button type="submit" class="action-btn">Register</button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script type="module">
+      import { saveUser } from './js/auth.js';
+      import { setupFormValidation } from './js/forms.js';
+      import './js/nav.js';
+
+      const form = document.getElementById('citizen-register-form');
+      setupFormValidation(form, async (data) => {
+        saveUser({
+          role: 'citizen',
+          username: data.username,
+          email: data.email,
+          phone: data.phone,
+          location: data.location,
+          nearestZoo: data.nearestZoo,
+          lat: data.latitude,
+          lng: data.longitude,
+          signedInAt: new Date().toISOString()
+        });
+        window.location.href = 'citizen-home.html';
+      });
+    </script>
+  </body>
+</html>

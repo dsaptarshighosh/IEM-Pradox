@@ -1,0 +1,50 @@
+:root {
+  /* Fonts */
+  --font-logo: "Iosevka Charon", "Iosevka", "Courier New", monospace;
+  --font-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Colors */
+  --color-bg-gradient-top: #E2FF7C;
+  --color-bg-gradient-bottom: #0A9654;
+
+  --color-nav-bg: #034754;
+  --color-nav-btn: #ACD90E;
+  --color-nav-btn-hover: #bde91c;
+  --color-nav-text: #FFFFFF;
+  --color-nav-btn-text: #024123;
+
+  --color-panel-header: #0ED984;
+  --color-panel-header-text: #024123;
+  --color-panel-body: #034954;
+  --color-panel-label: #C7FF01;
+
+  --color-card-bg: #E2FF7C;
+  --color-card-text: #024123;
+  --color-card-subtext: #194f38;
+  --color-card-tag-bg: #E2FF7C;
+
+  --color-action-btn: #0ED999;
+  --color-action-btn-hover: #12edab;
+  --color-action-btn-border: #2C2C2C;
+  --color-action-btn-text: #024123;
+
+  --color-input-bg: #E2FF7C;
+  --color-input-text: #024123;
+  --color-input-placeholder: #577862;
+
+  --color-hazard: #FF0000;
+  --color-warning-amber: #F5A623;
+  --color-normal-green: #0ED984;
+
+  /* Border Radii */
+  --radius-panel: 20px;
+  --radius-card: 20px;
+  --radius-input: 20px;
+  --radius-pill: 9999px;
+  --radius-btn: 8px;
+
+  /* Dimensions & Spacing */
+  --nav-height: 80px;
+  --max-width-content: 1320px;
+  --max-width-form: 720px;
+}

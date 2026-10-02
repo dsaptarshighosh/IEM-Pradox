@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgCroc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C2DC67"/>
+      <stop offset="100%" stop-color="#8BB845"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bgCroc)" rx="14"/>
+  <g fill="#024123" opacity="0.85" transform="translate(40, 70) scale(0.8)">
+    <!-- Crocodile silhouette -->
+    <path d="M 40 100 Q 80 80 140 85 Q 180 80 260 90 Q 320 85 360 70 Q 340 100 290 110 Q 230 115 160 110 Q 110 115 70 125 L 50 115 Z"/>
+    <polygon points="120,80 128,70 136,80 144,70 152,80 160,70 168,80 176,70 184,80 192,70 200,80 208,70 216,80" fill="#024123"/>
+    <circle cx="90" cy="85" r="4" fill="#E2FF7C"/>
+    <!-- Feet -->
+    <path d="M 110 110 L 105 130 L 125 130 Z" fill="#024123"/>
+    <path d="M 230 110 L 225 130 L 245 130 Z" fill="#024123"/>
+  </g>
+  <text x="50%" y="225" font-family="Inter, sans-serif" font-weight="700" font-size="16" fill="#024123" text-anchor="middle" letter-spacing="1">NILE &amp; SALTWATER CROCODILE</text>
+</svg>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Zookeeper Account - Living Lens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Iosevka+Charon:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+  </head>
+  <body>
+    <header id="navbar"></header>
+
+    <main class="page-wrapper">
+      <section class="panel" style="max-width: 1080px;">
+        <header class="panel-header">
+          <h2>Create Zookeeper Account</h2>
+        </header>
+
+        <div class="panel-body">
+          <div id="success-banner" style="display: none; background-color: #0ED984; color: #024123; padding: 14px 20px; border-radius: 12px; font-weight: 600; margin-bottom: 24px; text-align: center;">
+            ✓ Zookeeper account created successfully! Credentials recorded.
+          </div>
+
+          <form id="create-zookeeper-form" novalidate>
+            <div class="form-grid-2">
+              <!-- Left Column -->
+              <div>
+                <div class="form-group">
+                  <label for="zk-fullname" class="form-label">Full Name *</label>
+                  <input
+                    type="text"
+                    id="zk-fullname"
+                    name="fullName"
+                    class="pill-input"
+                    placeholder="e.g. Dr. Marcus Vance"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="zk-email" class="form-label">Email Address *</label>
+                  <input
+                    type="email"
+                    id="zk-email"
+                    name="email"
+                    class="pill-input"
+                    placeholder="marcus.vance@zoo-wildlife.org"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="zk-zoo" class="form-label">Assigned Zoo *</label>
+                  <div class="select-wrapper">
+                    <select id="zk-zoo" name="assignedZoo" class="pill-input" required>
+                      <option value="" disabled selected>Select assigned zoo...</option>
+                      <option value="ZOO-LON-01">Metropolitan City Zoological Gardens</option>
+                      <option value="ZOO-SGP-02">Central Wildlife Conservation Park</option>
+                      <option value="ZOO-SDG-03">Highland Biosphere &amp; Safari Sanctuary</option>
+                      <option value="ZOO-BER-04">Riverside Zoological Park</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="zk-temp-code" class="form-label">Temporary Zoo Access code *</label>
+                  <input
+                    type="password"
+                    id="zk-temp-code"
+                    name="tempCode"
+                    class="pill-input"
+                    placeholder="••••••••"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Right Column -->
+              <div>
+                <div class="form-group">
+                  <label for="zk-badge-id" class="form-label">Zookeeper ID / Badge *</label>
+                  <input
+                    type="text"
+                    id="zk-badge-id"
+                    name="badgeId"
+                    class="pill-input"
+                    placeholder="e.g. ZK-8821"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="zk-phone" class="form-label">Phone number *</label>
+                  <input
+                    type="tel"
+                    id="zk-phone"
+                    name="phone"
+                    class="pill-input"
+                    placeholder="+44 7700 900123"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="zk-section" class="form-label">Section / Enclosure Assigned *</label>
+                  <div class="select-wrapper">
+                    <select id="zk-section" name="section" class="pill-input" required>
+                      <option value="" disabled selected>Select section / enclosure...</option>
+                      <option value="Reptile House & Terrarium">Reptile House &amp; Terrarium</option>
+                      <option value="Elephant Valley">Elephant Valley</option>
+                      <option value="Big Cats & Predators">Big Cats &amp; Predators</option>
+                      <option value="Savanna & Ungulates">Savanna &amp; Ungulates</option>
+                      <option value="Aviary & Tropical Forest">Aviary &amp; Tropical Forest</option>
+                      <option value="Primate Habitat">Primate Habitat</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="zk-confirm-code" class="form-label">Confirm Access code *</label>
+                  <input
+                    type="password"
+                    id="zk-confirm-code"
+                    name="confirmCode"
+                    class="pill-input"
+                    placeholder="••••••••"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="form-actions-row">
+              <button type="button" id="cancel-btn" class="action-btn">
+                Cancel
+              </button>
+              <button type="submit" class="action-btn">
+                Create Zookeeper Account
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script type="module">
+      import { requireRole } from './js/auth.js';
+      import { setupFormValidation, showError } from './js/forms.js';
+      import './js/nav.js';
+
+      if (requireRole('admin')) {
+        const form = document.getElementById('create-zookeeper-form');
+        const successBanner = document.getElementById('success-banner');
+        const cancelBtn = document.getElementById('cancel-btn');
+
+        cancelBtn.addEventListener('click', () => {
+          form.reset();
+        });
+
+        setupFormValidation(form, async (data) => {
+          const tempCodeInput = document.getElementById('zk-temp-code');
+          const confirmCodeInput = document.getElementById('zk-confirm-code');
+
+          if (data.tempCode !== data.confirmCode) {
+            showError(confirmCodeInput, 'Access codes do not match');
+            return;
+          }
+
+          successBanner.style.display = 'block';
+          form.reset();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+
+          setTimeout(() => {
+            successBanner.style.display = 'none';
+          }, 4000);
+        });
+      }
+    </script>
+  </body>
+</html>

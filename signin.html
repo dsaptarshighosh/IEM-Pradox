@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In - Living Lens</title>
+    <meta name="description" content="Select your role to sign into the Living Lens Early Warning System." />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Iosevka+Charon:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+  </head>
+  <body>
+    <header id="navbar"></header>
+
+    <main class="page-wrapper">
+      <div class="auth-panel-container">
+        <section class="panel">
+          <header class="panel-header">
+            <h2>Select Your Role</h2>
+          </header>
+          <div class="panel-body" style="padding: 40px 32px; text-align: center;">
+            <p style="color: #E2FF7C; font-size: 16px; margin-bottom: 32px;">
+              Please select the portal appropriate for your access credentials:
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 18px; max-width: 380px; margin: 0 auto;">
+              <a href="zookeeper-login.html" class="action-btn" style="padding: 16px; font-size: 17px; text-align: center;">
+                Sign in as Zookeeper
+              </a>
+              <a href="admin-login.html" class="action-btn" style="padding: 16px; font-size: 17px; text-align: center;">
+                Sign in as Zoo Admin
+              </a>
+              <a href="citizen-login.html" class="action-btn" style="padding: 16px; font-size: 17px; text-align: center;">
+                Sign in as Citizen
+              </a>
+            </div>
+
+            <div style="margin-top: 36px;">
+              <a href="index.html" style="color: #C7FF01; font-size: 14px; text-decoration: underline;">
+                &larr; Back to Homepage
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script type="module" src="js/nav.js"></script>
+  </body>
+</html>

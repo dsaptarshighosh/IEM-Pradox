@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgBirds" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C2DC67"/>
+      <stop offset="100%" stop-color="#8BB845"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bgBirds)" rx="14"/>
+  <g fill="#024123" opacity="0.85" transform="translate(60, 45) scale(0.7)">
+    <!-- Birds silhouette in flight and branch -->
+    <path d="M 60 70 Q 90 40 120 70 Q 150 40 180 70 Q 150 60 120 75 Q 90 60 60 70 Z"/>
+    <path d="M 180 40 Q 200 20 220 40 Q 240 20 260 40 Q 240 35 220 45 Q 200 35 180 40 Z"/>
+    <path d="M 120 120 Q 150 90 190 110 Q 220 90 250 120 Q 210 110 190 130 Q 160 110 120 120 Z"/>
+    <line x1="50" y1="200" x2="330" y2="180" stroke="#024123" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="210" cy="155" r="16" fill="#024123"/>
+    <path d="M 215 155 Q 240 170 215 185 L 180 185 Q 185 165 210 155 Z" fill="#024123"/>
+    <polygon points="225,152 238,155 225,160" fill="#E2FF7C"/>
+  </g>
+  <text x="50%" y="225" font-family="Inter, sans-serif" font-weight="700" font-size="16" fill="#024123" text-anchor="middle" letter-spacing="1">AVIARY &amp; FOREST BIRDS</text>
+</svg>

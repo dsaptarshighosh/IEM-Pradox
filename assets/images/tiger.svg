@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgTiger" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C2DC67"/>
+      <stop offset="100%" stop-color="#8BB845"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bgTiger)" rx="14"/>
+  <g fill="#024123" opacity="0.85" transform="translate(60, 40) scale(0.7)">
+    <!-- Tiger / Big Cat silhouette -->
+    <path d="M 80 120 Q 90 80 130 90 Q 150 70 170 95 Q 230 85 270 110 Q 300 130 320 180 L 305 180 Q 295 145 260 140 Q 240 180 240 240 L 215 240 L 215 180 L 150 180 L 145 240 L 120 240 L 125 170 Q 90 170 75 140 Z"/>
+    <!-- Tail -->
+    <path d="M 75 140 Q 40 130 35 170 Q 30 200 50 205 Q 60 200 50 180 Q 55 155 80 150 Z"/>
+    <!-- Stripes -->
+    <path d="M 180 105 L 185 135 L 175 140 Z" fill="#E2FF7C"/>
+    <path d="M 210 110 L 215 145 L 205 150 Z" fill="#E2FF7C"/>
+    <path d="M 240 125 L 245 155 L 235 160 Z" fill="#E2FF7C"/>
+  </g>
+  <text x="50%" y="225" font-family="Inter, sans-serif" font-weight="700" font-size="16" fill="#024123" text-anchor="middle" letter-spacing="1">TIGERS &amp; BIG CATS</text>
+</svg>

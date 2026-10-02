@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Observation - Living Lens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Iosevka+Charon:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+  </head>
+  <body>
+    <header id="navbar"></header>
+
+    <main class="page-wrapper">
+      <section class="panel" style="max-width: 1080px;">
+        <header class="panel-header">
+          <h2>Upload Observation</h2>
+        </header>
+
+        <div class="panel-body">
+          <form id="upload-observation-form" novalidate>
+            <!-- Row 1: Animal Type & Observed Behaviour -->
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="animal-type" class="form-label">Animal Type *</label>
+                <div class="select-wrapper">
+                  <select id="animal-type" name="animal" class="pill-input" required>
+                    <option value="" disabled selected>Select animal...</option>
+                    <option value="Elephant">Elephant</option>
+                    <option value="Giraffe">Giraffe</option>
+                    <option value="Crocodile">Crocodile</option>
+                    <option value="Birds">Birds</option>
+                    <option value="Tigers & Big Cats">Tigers &amp; Big Cats</option>
+                    <option value="Snakes & Reptiles">Snakes &amp; Reptiles</option>
+                    <option value="Monkey">Monkey</option>
+                    <option value="Deer">Deer</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="observed-behaviour" class="form-label">Observed Behaviour *</label>
+                <div class="select-wrapper">
+                  <select id="observed-behaviour" name="observedBehaviour" class="pill-input" required>
+                    <option value="" disabled selected>Select behaviour pattern...</option>
+                    <option value="Repeated agitations">Repeated agitations</option>
+                    <option value="Sudden freeze in place">Sudden freeze in place</option>
+                    <option value="Fence pacing & low growls">Fence pacing &amp; low growls</option>
+                    <option value="Thrashing in water suddenly">Thrashing in water suddenly</option>
+                    <option value="Total silence (no vocalization)">Total silence (no vocalization)</option>
+                    <option value="Rushing into tight defensive group">Rushing into tight defensive group</option>
+                    <option value="Crawling out in broad daylight">Crawling out in broad daylight</option>
+                    <option value="Refusing to enter indoor night barns">Refusing to enter indoor night barns</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 2: Animal Counts -->
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="total-animals" class="form-label">Total animals of this type in zoo *</label>
+                <input
+                  type="number"
+                  id="total-animals"
+                  name="totalAnimals"
+                  class="pill-input"
+                  min="1"
+                  value="10"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="animals-showing" class="form-label">Animals showing this behaviour *</label>
+                <input
+                  type="number"
+                  id="animals-showing"
+                  name="animalsShowing"
+                  class="pill-input"
+                  min="1"
+                  value="7"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Row 3: Abnormality, Duration, Intensity -->
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label for="abnormality-percentage" class="form-label">Abnormality Percentage *</label>
+                <input
+                  type="number"
+                  id="abnormality-percentage"
+                  name="abnormalityPercentage"
+                  class="pill-input"
+                  min="1"
+                  max="100"
+                  value="70"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="duration-minutes" class="form-label">Duration for which the behaviour *</label>
+                <div style="position: relative; display: flex; align-items: center;">
+                  <input
+                    type="number"
+                    id="duration-minutes"
+                    name="durationMinutes"
+                    class="pill-input"
+                    min="1"
+                    value="30"
+                    style="padding-right: 80px;"
+                    required
+                  />
+                  <span style="position: absolute; right: 20px; color: #024123; font-weight: 600; font-size: 14px; pointer-events: none;">
+                    Minutes
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="observation-intensity" class="form-label">Observation Intensity *</label>
+                <div class="select-wrapper">
+                  <select id="observation-intensity" name="intensity" class="pill-input" required>
+                    <option value="10 - Very high" selected>10 - Very high</option>
+                    <option value="9 - High">9 - High</option>
+                    <option value="8 - High">8 - High</option>
+                    <option value="7 - Moderate-High">7 - Moderate-High</option>
+                    <option value="6 - Moderate">6 - Moderate</option>
+                    <option value="5 - Moderate">5 - Moderate</option>
+                    <option value="4 - Low-Moderate">4 - Low-Moderate</option>
+                    <option value="3 - Low">3 - Low</option>
+                    <option value="2 - Low">2 - Low</option>
+                    <option value="1 - Very low">1 - Very low</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 4: Description & File attachment -->
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="description" class="form-label">Detail Observation Description *</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  class="input"
+                  style="min-height: 90px; border-radius: 20px; resize: vertical;"
+                  placeholder="Provide concrete descriptions of vocalizations, tremors, defensive posture..."
+                  required
+                >Crocodile agitated, thrashing water repeatedly with deep bellows, refusing normal feeding.</textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Optional Media Attachment (Photo / Video) *</label>
+                <div style="background-color: var(--color-input-bg); border-radius: var(--radius-input); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 90px;">
+                  <label for="media-file" class="action-btn" style="cursor: pointer; padding: 7px 16px; font-size: 13.5px; border-radius: 6px; white-space: nowrap;">
+                    Browse...
+                  </label>
+                  <input
+                    type="file"
+                    id="media-file"
+                    name="mediaFile"
+                    accept=".jpg,.jpeg,.png,.mp4"
+                    style="display: none;"
+                  />
+                  <span id="file-name-display" style="font-size: 13.5px; color: #024123; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    No file selected
+                  </span>
+                  <span style="font-size: 11.5px; color: #194f38; text-align: right; line-height: 1.25; min-width: 110px;">
+                    Max 30MB<br />(JPG, PNG, MP4)
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Action Buttons -->
+            <div class="form-actions-row">
+              <a href="observations.html" class="action-btn" style="background-color: #0ED999;">
+                Cancel
+              </a>
+              <button type="submit" class="action-btn" style="background-color: #0ED999;">
+                Submit Verified Anomaly
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Hazard Probability Popup Modal (Page 7 from design PDF) -->
+      <div id="hazard-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-dialog">
+          <div class="panel-header" style="justify-content: center;">
+            <h2 id="modal-title">Hazard Probability</h2>
+          </div>
+          <div class="panel-body" style="padding: 36px 32px; text-align: center;">
+            <div class="card" style="margin-bottom: 28px; padding: 28px 20px; align-items: center;">
+              <p style="font-size: 15px; font-weight: 600; color: #024123; margin-bottom: 12px;">
+                Submitted Observation Risk Estimate
+              </p>
+              <div id="modal-risk-value" style="font-size: 48px; font-weight: 800; color: #024123; letter-spacing: -1px;">
+                84.12%
+              </div>
+            </div>
+            <div>
+              <button id="modal-close-btn" class="action-btn" style="min-width: 140px;">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module">
+      import { requireRole } from './js/auth.js';
+      import { setupFormValidation } from './js/forms.js';
+      import { calculateHazardProbability } from './js/hazard.js';
+      import { submitObservation } from './js/data.js';
+      import './js/nav.js';
+
+      if (requireRole('zookeeper')) {
+        const fileInput = document.getElementById('media-file');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const modal = document.getElementById('hazard-modal');
+        const modalRiskValue = document.getElementById('modal-risk-value');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        // Update file name display
+        fileInput.addEventListener('change', () => {
+          if (fileInput.files && fileInput.files[0]) {
+            fileNameDisplay.textContent = fileInput.files[0].name;
+          } else {
+            fileNameDisplay.textContent = 'No file selected';
+          }
+        });
+
+        // Form submission & hazard calculation
+        const form = document.getElementById('upload-observation-form');
+        setupFormValidation(form, async (data) => {
+          const hazardPct = calculateHazardProbability({
+            abnormalityPercentage: data.abnormalityPercentage,
+            intensity: data.intensity,
+            animalsAffected: Number(data.animalsShowing) || 1,
+            totalAnimals: Number(data.totalAnimals) || 1,
+            durationMinutes: Number(data.durationMinutes) || 30
+          });
+
+          await submitObservation({
+            animal: data.animal,
+            observedBehaviour: data.observedBehaviour,
+            abnormalityPercentage: data.abnormalityPercentage,
+            intensity: data.intensity,
+            durationMinutes: data.durationMinutes,
+            hazardProbability: hazardPct
+          });
+
+          modalRiskValue.textContent = hazardPct.toFixed(2) + '%';
+          modal.classList.add('active');
+        });
+
+        modalCloseBtn.addEventListener('click', () => {
+          modal.classList.remove('active');
+          window.location.href = 'observations.html';
+        });
+      }
+    </script>
+  </body>
+</html>

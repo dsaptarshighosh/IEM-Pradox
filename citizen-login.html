@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in as Citizen - Living Lens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Iosevka+Charon:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+  </head>
+  <body>
+    <header id="navbar"></header>
+
+    <main class="page-wrapper">
+      <div class="auth-panel-container">
+        <section class="panel">
+          <header class="panel-header">
+            <h2>Sign in as Citizen</h2>
+          </header>
+
+          <div class="panel-body">
+            <a href="citizen-register.html" class="auth-header-link">Don't have an account? Register</a>
+
+            <form id="citizen-login-form" novalidate>
+              <div class="form-group">
+                <label for="citizen-username" class="form-label">Username</label>
+                <input
+                  type="text"
+                  id="citizen-username"
+                  name="username"
+                  class="pill-input"
+                  placeholder="e.g. sarah_connor"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="citizen-email" class="form-label">Email Address</label>
+                <input
+                  type="email"
+                  id="citizen-email"
+                  name="email"
+                  class="pill-input"
+                  placeholder="sarah@example.com"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="citizen-password" class="form-label">Password</label>
+                <input
+                  type="password"
+                  id="citizen-password"
+                  name="password"
+                  class="pill-input"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+
+              <div class="auth-submit-row">
+                <button type="submit" class="action-btn">Sign In</button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script type="module">
+      import { saveUser } from './js/auth.js';
+      import { setupFormValidation } from './js/forms.js';
+      import './js/nav.js';
+
+      const form = document.getElementById('citizen-login-form');
+      setupFormValidation(form, async (data) => {
+        saveUser({
+          role: 'citizen',
+          username: data.username,
+          email: data.email,
+          signedInAt: new Date().toISOString()
+        });
+        window.location.href = 'citizen-home.html';
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zoo Alerts Near You - Living Lens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Iosevka+Charon:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+  </head>
+  <body>
+    <header id="navbar"></header>
+
+    <main class="page-wrapper">
+      <section class="panel">
+        <header class="panel-header">
+          <h2>Zoo Alerts Near You</h2>
+          <a href="live-map.html" class="action-btn" style="font-size: 15px; padding: 8px 18px;">
+            View Live Map
+          </a>
+        </header>
+
+        <div class="panel-body">
+          <div id="alerts-container" class="alerts-grid">
+            <!-- Rendered by js/data.js -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module">
+      import { requireRole } from './js/auth.js';
+      import { getAlerts } from './js/data.js';
+      import './js/nav.js';
+
+      if (requireRole('citizen')) {
+        const container = document.getElementById('alerts-container');
+
+        async function loadAlerts() {
+          const alerts = await getAlerts();
+          container.innerHTML = alerts.map(alert => `
+            <div class="alert-card">
+              <p><strong>Animal:</strong> ${alert.animal}</p>
+              <p><strong>Observed Behaviour:</strong></p>
+              <p style="margin-top:-4px; color:#194f38;">${alert.observedBehaviour}</p>
+              <p><strong>Distance from you:</strong> ${alert.distanceKm.toFixed(1)} km</p>
+              <p><strong>Advisory:</strong> ${alert.advisory}</p>
+              <p class="card-hazard" style="margin-top:4px;">Hazard probability: ${Number(alert.hazardProbability).toFixed(2)}%</p>
+            </div>
+          `).join('');
+        }
+
+        loadAlerts();
+      }
+    </script>
+  </body>
+</html>

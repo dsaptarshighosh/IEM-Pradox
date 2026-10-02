@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in as Zookeeper - Living Lens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Iosevka+Charon:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+  </head>
+  <body>
+    <header id="navbar"></header>
+
+    <main class="page-wrapper">
+      <div class="auth-panel-container">
+        <section class="panel">
+          <header class="panel-header">
+            <h2>Sign in as Zookeeper</h2>
+          </header>
+
+          <div class="panel-body">
+            <form id="zookeeper-login-form" novalidate>
+              <div class="form-group">
+                <label for="zoo-select" class="form-label">Enter your Zoo</label>
+                <div class="select-wrapper">
+                  <select id="zoo-select" name="zoo" class="pill-input" required>
+                    <option value="" disabled selected>Select registered zoo...</option>
+                    <option value="ZOO-LON-01">Metropolitan City Zoological Gardens</option>
+                    <option value="ZOO-SGP-02">Central Wildlife Conservation Park</option>
+                    <option value="ZOO-SDG-03">Highland Biosphere &amp; Safari Sanctuary</option>
+                    <option value="ZOO-BER-04">Riverside Zoological Park</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="badge-id" class="form-label">Zookeeper ID / Badge</label>
+                <input
+                  type="text"
+                  id="badge-id"
+                  name="badgeId"
+                  class="pill-input"
+                  placeholder="e.g. ZK-4819"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="access-code" class="form-label">Zoo Access code</label>
+                <input
+                  type="password"
+                  id="access-code"
+                  name="accessCode"
+                  class="pill-input"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+
+              <div class="auth-submit-row">
+                <button type="submit" class="action-btn">Sign In</button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script type="module">
+      import { saveUser } from './js/auth.js';
+      import { setupFormValidation } from './js/forms.js';
+      import './js/nav.js';
+
+      const form = document.getElementById('zookeeper-login-form');
+      setupFormValidation(form, async (data) => {
+        saveUser({
+          role: 'zookeeper',
+          zoo: data.zoo,
+          badgeId: data.badgeId,
+          signedInAt: new Date().toISOString()
+        });
+        window.location.href = 'observations.html';
+      });
+    </script>
+  </body>
+</html>

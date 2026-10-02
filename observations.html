@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Past Observations - Living Lens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Iosevka+Charon:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+  </head>
+  <body>
+    <header id="navbar"></header>
+
+    <main class="page-wrapper">
+      <section class="panel">
+        <header class="panel-header">
+          <h2>Your Past Observations</h2>
+          <a href="upload-observation.html" class="action-btn" style="font-size: 15px; padding: 8px 18px;">
+            Upload Observation
+          </a>
+        </header>
+
+        <div class="panel-body">
+          <div id="observations-container" class="observations-grid">
+            <!-- Rendered by js/data.js -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module">
+      import { requireRole } from './js/auth.js';
+      import { getObservations } from './js/data.js';
+      import './js/nav.js';
+
+      // Ensure user is signed in as zookeeper
+      if (requireRole('zookeeper')) {
+        const container = document.getElementById('observations-container');
+
+        async function loadObservations() {
+          const observations = await getObservations();
+          container.innerHTML = observations.map(obs => `
+            <div class="observation-card">
+              <p><strong>Animal:</strong> ${obs.animal}</p>
+              <p><strong>Observed Behaviour:</strong></p>
+              <p style="margin-top:-4px; color:#194f38;">${obs.observedBehaviour}</p>
+              <p><strong>Abnormality Percentage:</strong> ${obs.abnormalityPercentage}</p>
+              <p><strong>Intensity:</strong> ${obs.intensity}</p>
+              <p><strong>Duration of behaviour (minutes):</strong> ${obs.durationMinutes}</p>
+              <p class="card-hazard" style="margin-top:4px;">Hazard probability: ${Number(obs.hazardProbability).toFixed(2)}%</p>
+            </div>
+          `).join('');
+        }
+
+        loadObservations();
+      }
+    </script>
+  </body>
+</html>

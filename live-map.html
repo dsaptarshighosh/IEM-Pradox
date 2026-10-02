@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Map - Living Lens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Iosevka+Charon:wght@400;700&display=swap" rel="stylesheet" />
+
+    <!-- Leaflet CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+  </head>
+  <body>
+    <header id="navbar"></header>
+
+    <main class="page-wrapper">
+      <section class="panel">
+        <header class="panel-header">
+          <h2>Live Map</h2>
+          <div class="map-legend">
+            <span class="legend-item"><span class="legend-dot high"></span> High risk</span>
+            <span class="legend-item"><span class="legend-dot medium"></span> Medium</span>
+            <span class="legend-item"><span class="legend-dot normal"></span> Normal</span>
+          </div>
+        </header>
+
+        <div class="panel-body">
+          <div class="map-page-layout">
+            <!-- Left: Interactive Leaflet Map & Zone Overlays -->
+            <div>
+              <div id="leaflet-map" class="map-container" style="height: 520px; border-radius: 20px;"></div>
+
+              <!-- Zone Grid Overview (matching page 6 visual cards) -->
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;">
+                <div class="card" style="padding: 16px; min-height: 100px; justify-content: space-between;">
+                  <span style="font-weight: 600; font-size: 14px;">Elephant Enclosure</span>
+                  <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                    <span class="legend-dot high" style="width: 14px; height: 14px;"></span>
+                    <span style="font-weight: 700; font-size: 15px;">84.12%</span>
+                  </div>
+                </div>
+
+                <div class="card" style="padding: 16px; min-height: 100px; justify-content: space-between;">
+                  <span style="font-weight: 600; font-size: 14px;">Big Cats</span>
+                  <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                    <span class="legend-dot medium" style="width: 14px; height: 14px;"></span>
+                    <span style="font-weight: 700; font-size: 15px;">55.90%</span>
+                  </div>
+                </div>
+
+                <div class="card" style="padding: 16px; min-height: 100px; justify-content: space-between;">
+                  <span style="font-weight: 600; font-size: 14px;">Reptile House</span>
+                  <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                    <span class="legend-dot high" style="width: 14px; height: 14px;"></span>
+                    <span style="font-weight: 700; font-size: 15px;">78.40%</span>
+                  </div>
+                </div>
+
+                <div class="card" style="padding: 16px; min-height: 100px; justify-content: space-between;">
+                  <span style="font-weight: 600; font-size: 14px;">Aviary</span>
+                  <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                    <span class="legend-dot normal" style="width: 14px; height: 14px;"></span>
+                    <span style="font-weight: 700; font-size: 15px;">12.30%</span>
+                  </div>
+                </div>
+
+                <div class="card" style="padding: 16px; min-height: 100px; justify-content: space-between;">
+                  <span style="font-weight: 600; font-size: 14px;">Giraffe Paddock</span>
+                  <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                    <span class="legend-dot medium" style="width: 14px; height: 14px;"></span>
+                    <span style="font-weight: 700; font-size: 15px;">48.10%</span>
+                  </div>
+                </div>
+
+                <div class="card" style="padding: 16px; min-height: 100px; justify-content: space-between;">
+                  <span style="font-weight: 600; font-size: 14px;">Wetland</span>
+                  <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                    <span class="legend-dot normal" style="width: 14px; height: 14px;"></span>
+                    <span style="font-weight: 700; font-size: 15px;">8.75%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Active Alerts Sidebar -->
+            <aside class="alerts-sidebar">
+              <h3 class="alerts-sidebar-title">Active Alerts</h3>
+              <div id="active-alerts-list" style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Populated by js/map.js -->
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module">
+      import { initLiveMap } from './js/map.js';
+      import './js/nav.js';
+
+      window.addEventListener('DOMContentLoaded', () => {
+        initLiveMap();
+      });
+    </script>
+  </body>
+</html>
