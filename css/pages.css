@@ -197,6 +197,7 @@
 .legend-dot.high { background-color: var(--color-hazard); }
 .legend-dot.medium { background-color: var(--color-warning-amber); }
 .legend-dot.normal { background-color: var(--color-normal-green); }
+.legend-dot.unknown { background-color: #808080; }
 
 .alerts-sidebar {
   display: flex;
