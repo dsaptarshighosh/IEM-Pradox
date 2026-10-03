@@ -18,45 +18,6 @@ export const ZOOS = [
   { id: 'ZOO-BER-04', name: 'Riverside Zoological Park' }
 ];
 
-export const ZOO_OBSERVATIONS = [
-  {
-    keeper_id: '1',
-    zoo_id: 'Z001',
-    animal_name: 'Elephant',
-    behaviour: 'Repeated pacing and unusual vocalization',
-    intensity: 8,
-    animal_percentage: 72,
-    duration: 18
-  },
-  {
-    keeper_id: '1',
-    zoo_id: 'Z001',
-    animal_name: 'Giraffe',
-    behaviour: 'Repeated directional movement and agitation',
-    intensity: 6,
-    animal_percentage: 68,
-    duration: 12
-  },
-  {
-    keeper_id: '1',
-    zoo_id: 'Z001',
-    animal_name: 'Crocodile',
-    behaviour: 'Thrashing water and sudden bellowing',
-    intensity: 8,
-    animal_percentage: 64,
-    duration: 22
-  },
-  {
-    keeper_id: '1',
-    zoo_id: 'Z001',
-    animal_name: 'Snake',
-    behaviour: 'Crawling out in broad daylight',
-    intensity: 6,
-    animal_percentage: 38,
-    duration: 9
-  }
-];
-
 export const ZOO_ALERTS = [
   {
     animal: 'Giraffe',
@@ -250,10 +211,6 @@ export async function registerCitizen(payload) {
 
 export async function loginAdmin(payload) {
   return adminLogin(payload);
-}
-
-export function getZooObservations() {
-  return [...ZOO_OBSERVATIONS];
 }
 
 export function getZooAlerts() {

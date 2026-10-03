@@ -81,6 +81,8 @@ export function normalizeObservation(item = {}) {
 
   return {
     id: valueOr(item.id, item._id, `obs-${Date.now()}-${Math.random()}`),
+    keeper_id: valueOr(item.keeper_id, item.keeperId),
+    zoo_id: valueOr(item.zoo_id, item.zooId),
     animal: valueOr(item.animal_name, item.animal, item.animalName, 'Unknown animal'),
     observedBehaviour: valueOr(item.behaviour, item.observed_behaviour, item.observedBehaviour, 'No behaviour recorded'),
     abnormalityPercentage: asNumber(
