@@ -1,7 +1,6 @@
 import {
   getObservations as fetchObservations,
   getZooKeepers as fetchZooKeepers,
-  addObservation as createObservation,
   predictHazard as fetchPrediction,
   sendEmergencyEmail as triggerEmergencyEmail,
   checkBackendHealth,
@@ -173,25 +172,6 @@ export async function getZoos() {
 
 export async function getObservations() {
   return fetchObservations();
-}
-
-export async function submitObservation(data) {
-  const payload = {
-    keeper_id: data.keeper_id || data.keeperId || 'K001',
-    zoo_id: data.zoo_id || data.zooId || 'Z001',
-    animal_name: data.animal_name || data.animal || 'Unknown',
-    behaviour: data.behaviour || data.observedBehaviour || 'No behaviour recorded',
-    intensity: asNumber(data.intensity || data.observationIntensity || 5, 5),
-    animal_percentage: asNumber(data.animal_percentage || data.abnormalityPercentage || 0, 0),
-    duration: asNumber(data.duration || data.durationMinutes || 0, 0)
-  };
-
-  try {
-    return await createObservation(payload);
-  } catch (error) {
-    console.error('Observation submission failed:', error);
-    throw error;
-  }
 }
 
 export async function getAlerts() {

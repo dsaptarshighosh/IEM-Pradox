@@ -254,7 +254,7 @@
     <script type="module">
       import { requireRole, getCurrentUser } from './js/auth.js';
       import { setupFormValidation, showError, clearError } from './js/forms.js';
-      import { submitObservation, predictHazard } from './js/data.js';
+      import { predictHazard } from './js/data.js';
       import './js/nav.js';
 
       if (requireRole('zookeeper')) {
@@ -308,29 +308,23 @@
             const intensityValue = Number((data.intensity || '5 - Moderate').split(' ')[0]);
             const abnormalityPercent = totalAnimals > 0 ? Math.min((animalsShowing / totalAnimals) * 100, 100) : 0;
             const hazardResponse = await predictHazard({
-              animal: data.animal,
-              behaviour: data.observedBehaviour,
-              intensity: intensityValue,
-              abnormality_percentage: Number(abnormalityPercent.toFixed(0)),
-              duration_minutes: Number(data.durationMinutes || 0)
-            });
-
-            const hazardPct = Number(
-              hazardResponse?.hazard_probability ??
-              hazardResponse?.hazardProbability ??
-              hazardResponse?.probability ??
-              0
-            );
-
-            await submitObservation({
               keeper_id: user?.keeper_id || user?.badgeId || 'K001',
               zoo_id: user?.zoo_id || user?.zoo || user?.zooId || 'Z001',
               animal_name: data.animal,
               behaviour: data.observedBehaviour,
               intensity: intensityValue,
               animal_percentage: Number(abnormalityPercent.toFixed(0)),
-              duration: Number(data.durationMinutes || 0)
+              duration: Number(data.durationMinutes || 0),
+              date: new Date().toISOString()
             });
+
+            const hazardPct = Number(
+              hazardResponse?.hazard_probability ??
+              hazardResponse?.hazardProbability ??
+              hazardResponse?.probability ??
+              hazardResponse?.prediction ??
+              0
+            );
 
             const gaugePct = Number.isFinite(hazardPct) ? Math.min(Math.max(hazardPct, 0), 100) : 0;
             modalRiskGauge.setAttribute('aria-valuenow', String(gaugePct));

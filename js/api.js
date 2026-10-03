@@ -123,13 +123,6 @@ export async function keeperLogin(payload) {
   });
 }
 
-export async function addObservation(payload) {
-  return requestJson('/add_observation', {
-    method: 'POST',
-    body: JSON.stringify(payload)
-  });
-}
-
 export async function predictHazard(payload) {
   return requestJson('/predict', {
     method: 'POST',
