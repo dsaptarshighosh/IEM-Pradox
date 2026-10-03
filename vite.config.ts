@@ -19,6 +19,7 @@ export default defineConfig(({mode}) => {
         input: {
           main: path.resolve(__dirname, 'index.html'),
           signin: path.resolve(__dirname, 'signin.html'),
+          zookeeperLogin: path.resolve(__dirname, 'zookeeper-login.html'),
           adminLogin: path.resolve(__dirname, 'admin-login.html'),
           citizenLogin: path.resolve(__dirname, 'citizen-login.html'),
           citizenRegister: path.resolve(__dirname, 'citizen-register.html'),

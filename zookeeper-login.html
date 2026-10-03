@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in as Zookeeper - Living Lens</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Iosevka+Charon:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+  </head>
+  <body>
+    <header id="navbar"></header>
+
+    <main class="page-wrapper">
+      <div class="auth-panel-container">
+        <section class="panel">
+          <header class="panel-header">
+            <h2>Sign in as Zookeeper</h2>
+          </header>
+
+          <div class="panel-body">
+            <p class="auth-header-link">Demo access: Zoo ID, Keeper ID, and password are not verified. Use this login for local testing only.</p>
+            <form id="zookeeper-login-form" novalidate>
+              <div class="form-group">
+                <label for="zoo-id" class="form-label">Zoo ID</label>
+                <input
+                  type="text"
+                  id="zoo-id"
+                  name="zoo_id"
+                  class="pill-input"
+                  placeholder="Enter your Zoo ID"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="keeper-id" class="form-label">Keeper ID</label>
+                <input
+                  type="text"
+                  id="keeper-id"
+                  name="keeper_id"
+                  class="pill-input"
+                  placeholder="Enter your Keeper ID"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="keeper-password" class="form-label">Password</label>
+                <input
+                  type="password"
+                  id="keeper-password"
+                  name="password"
+                  class="pill-input"
+                  placeholder="Any password"
+                  required
+                />
+              </div>
+
+              <div class="auth-submit-row">
+                <button type="submit" class="action-btn">Sign In</button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script type="module">
+      import { saveUser } from './js/auth.js';
+      import { setupFormValidation } from './js/forms.js';
+      import './js/nav.js';
+
+      const form = document.getElementById('zookeeper-login-form');
+      setupFormValidation(form, (data) => {
+        saveUser({
+          role: 'zookeeper',
+          username: data.keeper_id,
+          keeper_id: data.keeper_id,
+          zoo_id: data.zoo_id,
+          signedInAt: new Date().toISOString()
+        });
+
+        window.location.href = 'observations.html';
+      });
+    </script>
+  </body>
+</html>

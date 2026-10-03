@@ -23,6 +23,7 @@ export function renderNavbar() {
 
   const isAuthPage = [
     'signin.html',
+    'zookeeper-login.html',
     'admin-login.html',
     'citizen-login.html',
     'citizen-register.html'
