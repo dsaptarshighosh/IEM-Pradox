@@ -25,38 +25,37 @@
           <div class="panel-body">
             <form id="zookeeper-login-form" novalidate>
               <div class="form-group">
-                <label for="zoo-select" class="form-label">Enter your Zoo</label>
-                <div class="select-wrapper">
-                  <select id="zoo-select" name="zoo" class="pill-input" required>
-                    <option value="" disabled selected>Select registered zoo...</option>
-                    <option value="ZOO-LON-01">Metropolitan City Zoological Gardens</option>
-                    <option value="ZOO-SGP-02">Central Wildlife Conservation Park</option>
-                    <option value="ZOO-SDG-03">Highland Biosphere &amp; Safari Sanctuary</option>
-                    <option value="ZOO-BER-04">Riverside Zoological Park</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="badge-id" class="form-label">Zookeeper ID / Badge</label>
+                <label for="zoo-select" class="form-label">Zoo ID</label>
                 <input
                   type="text"
-                  id="badge-id"
-                  name="badgeId"
+                  id="zoo-select"
+                  name="zoo_id"
                   class="pill-input"
-                  placeholder="e.g. ZK-4819"
+                  placeholder="Enter your Zoo ID"
                   required
                 />
               </div>
 
               <div class="form-group">
-                <label for="access-code" class="form-label">Zoo Access code</label>
+                <label for="keeper-username" class="form-label">Username</label>
                 <input
-                  type="password"
-                  id="access-code"
-                  name="accessCode"
+                  type="text"
+                  id="keeper-username"
+                  name="username"
                   class="pill-input"
-                  placeholder="••••••••"
+                  placeholder="Enter your username"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="badge-id" class="form-label">Keeper ID</label>
+                <input
+                  type="text"
+                  id="badge-id"
+                  name="keeper_id"
+                  class="pill-input"
+                  placeholder="e.g. ZK-4819"
                   required
                 />
               </div>
@@ -80,9 +79,9 @@
       setupFormValidation(form, async (data) => {
         try {
           const payload = {
-            username: data.username || data.badgeId || 'keeper',
-            keeper_id: data.badgeId || data.keeperId || 'K001',
-            zoo_id: data.zoo || data.zooId || 'Z001'
+            username: data.username,
+            keeper_id: data.keeper_id,
+            zoo_id: data.zoo_id
           };
 
           const response = await keeperLogin(payload);
@@ -98,7 +97,7 @@
 
           window.location.href = 'observations.html';
         } catch (error) {
-          const input = document.getElementById('access-code');
+          const input = document.getElementById('badge-id');
           showError(input, error.message || 'Unable to sign in. Please check your credentials.');
         }
       });

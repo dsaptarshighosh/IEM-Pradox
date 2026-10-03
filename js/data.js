@@ -180,12 +180,7 @@ export async function getZoos() {
 }
 
 export async function getObservations() {
-  try {
-    return await fetchObservations();
-  } catch (error) {
-    console.error('Failed to fetch observations from backend:', error);
-    return [];
-  }
+  return fetchObservations();
 }
 
 export async function submitObservation(data) {

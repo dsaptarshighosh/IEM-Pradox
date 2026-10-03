@@ -25,38 +25,37 @@
           <div class="panel-body">
             <form id="admin-login-form" novalidate>
               <div class="form-group">
-                <label for="zoo-id-select" class="form-label">Zoo ID / Registered Zoo Identifier</label>
-                <div class="select-wrapper">
-                  <select id="zoo-id-select" name="zooId" class="pill-input" required>
-                    <option value="" disabled selected>Select registered zoo identifier...</option>
-                    <option value="ZOO-LON-01">ZOO-LON-01 (Metropolitan City Zoo)</option>
-                    <option value="ZOO-SGP-02">ZOO-SGP-02 (Central Wildlife Park)</option>
-                    <option value="ZOO-SDG-03">ZOO-SDG-03 (Highland Biosphere)</option>
-                    <option value="ZOO-BER-04">ZOO-BER-04 (Riverside Zoo)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="admin-email" class="form-label">Administrator Email</label>
+                <label for="admin-zoo-id" class="form-label">Zoo ID</label>
                 <input
-                  type="email"
-                  id="admin-email"
-                  name="email"
+                  type="text"
+                  id="admin-zoo-id"
+                  name="zoo_id"
                   class="pill-input"
-                  placeholder="admin@zoo-authority.org"
+                  placeholder="Enter your Zoo ID"
                   required
                 />
               </div>
 
               <div class="form-group">
-                <label for="admin-password" class="form-label">Password</label>
+                <label for="admin-username" class="form-label">Username</label>
+                <input
+                  type="text"
+                  id="admin-username"
+                  name="username"
+                  class="pill-input"
+                  placeholder="Enter your username"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="admin-password" class="form-label">Admin Key</label>
                 <input
                   type="password"
                   id="admin-password"
-                  name="password"
+                  name="admin_key"
                   class="pill-input"
-                  placeholder="••••••••"
+                  placeholder="Enter your admin key"
                   required
                 />
               </div>
@@ -80,9 +79,9 @@
       setupFormValidation(form, async (data) => {
         try {
           const payload = {
-            username: data.email || data.username || 'admin',
-            admin_key: data.password || data.adminKey || '',
-            zoo_id: data.zooId || data.zoo_id || 'Z001'
+            username: data.username,
+            admin_key: data.admin_key,
+            zoo_id: data.zoo_id
           };
 
           const response = await adminLogin(payload);
@@ -91,7 +90,6 @@
             role: 'admin',
             username: response?.username || payload.username,
             zooId: response?.zoo_id || payload.zoo_id,
-            email: data.email,
             ...response,
             signedInAt: new Date().toISOString()
           });
