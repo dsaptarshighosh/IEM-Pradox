@@ -1,6 +1,7 @@
 import {
   getObservations as fetchObservations,
   getZooKeepers as fetchZooKeepers,
+  addObservation as createObservation,
   predictHazard as fetchPrediction,
   sendEmergencyEmail as triggerEmergencyEmail,
   checkBackendHealth,
@@ -133,6 +134,15 @@ export async function getZoos() {
 
 export async function getObservations() {
   return fetchObservations();
+}
+
+export async function submitObservation(payload) {
+  try {
+    return await createObservation(payload);
+  } catch (error) {
+    console.error('Observation submission failed:', error);
+    throw error;
+  }
 }
 
 export async function getAlerts() {
