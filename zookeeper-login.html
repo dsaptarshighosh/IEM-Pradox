@@ -23,7 +23,7 @@
           </header>
 
           <div class="panel-body">
-            <p class="auth-header-link">Demo access: Zoo ID, Keeper ID, and password are not verified. Use this login for local testing only.</p>
+            <p class="auth-header-link">Demo access: passwords are not verified. A missing keeper record is created for the entered Zoo ID.</p>
             <form id="zookeeper-login-form" novalidate>
               <div class="form-group">
                 <label for="zoo-id" class="form-label">Zoo ID</label>
@@ -72,20 +72,40 @@
 
     <script type="module">
       import { saveUser } from './js/auth.js';
-      import { setupFormValidation } from './js/forms.js';
+      import { setupFormValidation, showError } from './js/forms.js';
+      import { addZooKeeper, getZooKeepers } from './js/api.js';
       import './js/nav.js';
 
       const form = document.getElementById('zookeeper-login-form');
-      setupFormValidation(form, (data) => {
-        saveUser({
-          role: 'zookeeper',
-          username: data.keeper_id,
-          keeper_id: data.keeper_id,
-          zoo_id: data.zoo_id,
-          signedInAt: new Date().toISOString()
-        });
+      setupFormValidation(form, async (data) => {
+        const zooId = data.zoo_id.trim();
+        const keeperId = data.keeper_id.trim();
 
-        window.location.href = 'observations.html';
+        try {
+          const keepers = await getZooKeepers(zooId);
+          const keeper = keepers.find((item) => item.keeper_id === keeperId);
+          const verifiedKeeper = keeper || await addZooKeeper({
+            username: keeperId,
+            keeper_id: keeperId,
+            zoo_id: zooId
+          });
+
+          saveUser({
+            role: 'zookeeper',
+            username: verifiedKeeper?.username || keeperId,
+            keeper_id: verifiedKeeper?.keeper_id || keeperId,
+            zoo_id: verifiedKeeper?.zoo_id || zooId,
+            signedInAt: new Date().toISOString()
+          });
+
+          window.location.href = 'observations.html';
+        } catch (error) {
+          console.error('Unable to prepare keeper account:', error);
+          showError(
+            document.getElementById('keeper-id'),
+            error.message || 'Unable to register or verify this keeper with the API.'
+          );
+        }
       });
     </script>
   </body>
