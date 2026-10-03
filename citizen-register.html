@@ -40,7 +40,7 @@
                   id="reg-username"
                   name="username"
                   class="pill-input"
-                  placeholder="e.g. ananyasen"
+                  placeholder="e.g. janesmith"
                   required
                 />
               </div>
@@ -52,7 +52,7 @@
                   id="reg-email"
                   name="email"
                   class="pill-input"
-                  placeholder="ananya.sen@example.in"
+                  placeholder="jane.smith@example.org"
                   required
                 />
               </div>
@@ -64,7 +64,7 @@
                   id="reg-phone"
                   name="phone"
                   class="pill-input"
-                  placeholder="+91 98765 43210"
+                  placeholder="+44 7911 123456"
                   required
                 />
               </div>
@@ -82,10 +82,14 @@
               </div>
 
               <div class="form-group">
-                <label for="reg-protected-area" class="form-label">Nearest protected area *</label>
+                <label for="reg-zoo" class="form-label">Nearest Zoo</label>
                 <div class="select-wrapper">
-                  <select id="reg-protected-area" name="nearestProtectedArea" class="pill-input" required>
-                    <option value="" disabled selected>Select a protected area...</option>
+                  <select id="reg-zoo" name="nearestZoo" class="pill-input" required>
+                    <option value="" disabled selected>Select nearest zoo...</option>
+                    <option value="ZOO-LON-01">Metropolitan City Zoological Gardens (London)</option>
+                    <option value="ZOO-SGP-02">Central Wildlife Conservation Park</option>
+                    <option value="ZOO-SDG-03">Highland Biosphere &amp; Safari Sanctuary</option>
+                    <option value="ZOO-BER-04">Riverside Zoological Park</option>
                   </select>
                 </div>
               </div>
@@ -97,7 +101,7 @@
                   id="reg-location"
                   name="location"
                   class="pill-input"
-                  placeholder="e.g. Jalpaiguri, West Bengal"
+                  placeholder="e.g. Camden, Greater London"
                   required
                 />
               </div>
@@ -110,7 +114,7 @@
                     id="reg-lat"
                     name="latitude"
                     class="pill-input"
-                    value="23.0"
+                    value="51.5355"
                     required
                   />
                 </div>
@@ -121,7 +125,7 @@
                     id="reg-lng"
                     name="longitude"
                     class="pill-input"
-                    value="87.9"
+                    value="-0.1550"
                     required
                   />
                 </div>
@@ -140,24 +144,10 @@
       import { saveUser } from './js/auth.js';
       import { setupFormValidation, showError } from './js/forms.js';
       import { citizenRegister } from './js/api.js';
-      import { protectedAreas } from './js/protected-areas.js';
       import './js/nav.js';
 
       const form = document.getElementById('citizen-register-form');
       const banner = document.getElementById('registration-success-banner');
-      const protectedAreaSelect = document.getElementById('reg-protected-area');
-
-      protectedAreas.forEach((area) => {
-        protectedAreaSelect.add(new Option(`${area.name} — ${area.district}`, area.id));
-      });
-      protectedAreaSelect.addEventListener('change', () => {
-        const area = protectedAreas.find(({ id }) => id === protectedAreaSelect.value);
-        if (area) {
-          document.getElementById('reg-location').value = area.district;
-          document.getElementById('reg-lat').value = String(area.latitude);
-          document.getElementById('reg-lng').value = String(area.longitude);
-        }
-      });
 
       setupFormValidation(form, async (data) => {
         try {
@@ -185,7 +175,7 @@
             email: data.email,
             phone: data.phone,
             location: data.location,
-            nearestProtectedArea: data.nearestProtectedArea,
+            nearestZoo: data.nearestZoo,
             latitude: Number(data.latitude),
             longitude: Number(data.longitude),
             registeredWithLivingLens: true,

@@ -23,36 +23,19 @@
 
         <div class="panel-body">
           <form id="upload-observation-form" novalidate>
-            <!-- Row 1: Species, protected area & observed behaviour -->
-            <div class="form-grid-3">
+            <!-- Row 1: Animal Type & Observed Behaviour -->
+            <div class="form-grid-2">
               <div class="form-group">
-                <label for="animal-type" class="form-label">Wildlife species *</label>
+                <label for="animal-type" class="form-label">Animal Type *</label>
                 <div class="select-wrapper">
                   <select id="animal-type" name="animal" class="pill-input" required>
-                    <option value="" disabled selected>Select a species...</option>
-                    <option value="Royal Bengal Tiger">Royal Bengal Tiger</option>
-                    <option value="Indian One-horned Rhinoceros">Indian One-horned Rhinoceros</option>
-                    <option value="Asian Elephant">Asian Elephant</option>
-                    <option value="Indian Gaur">Indian Gaur</option>
-                    <option value="Red Panda">Red Panda</option>
-                    <option value="Clouded Leopard">Clouded Leopard</option>
-                    <option value="Fishing Cat">Fishing Cat</option>
-                    <option value="Saltwater Crocodile">Saltwater Crocodile</option>
-                    <option value="Gangetic Dolphin">Gangetic Dolphin</option>
-                    <option value="Hornbills">Hornbills</option>
-                    <option value="Migratory Waterbirds">Migratory Waterbirds</option>
+                    <option value="" disabled selected>Select animal...</option>
+                    <option value="Elephant">Elephant</option>
+                    <option value="Giraffe">Giraffe</option>
+                    <option value="Crocodile">Crocodile</option>
+                    <option value="Snake">Snake</option>
                   </select>
                 </div>
-              </div>
-
-              <div class="form-group">
-                <label for="protected-area" class="form-label">Protected area *</label>
-                <div class="select-wrapper">
-                  <select id="protected-area" name="protectedAreaId" class="pill-input" required>
-                    <option value="" disabled selected>Select a protected area...</option>
-                  </select>
-                </div>
-                <p style="color:#194f38; font-size:13px;">The connected API has no protected-area or date fields. The selected area is sent through its legacy site-ID field; the submitted date may not be stored, and historical area labels depend on the API returning that identifier.</p>
               </div>
 
               <div class="form-group">
@@ -62,21 +45,21 @@
                     <option value="" disabled selected>Select behaviour pattern...</option>
                     <option value="Repeated agitations">Repeated agitations</option>
                     <option value="Sudden freeze in place">Sudden freeze in place</option>
-                    <option value="Repeated pacing and low vocalisation">Repeated pacing and low vocalisation</option>
-                    <option value="Sudden movement in water">Sudden movement in water</option>
-                    <option value="Sudden silence or reduced calls">Sudden silence or reduced calls</option>
-                    <option value="Gathering in a defensive group">Gathering in a defensive group</option>
-                    <option value="Unusual emergence from shelter">Unusual emergence from shelter</option>
-                    <option value="Avoiding usual resting or feeding sites">Avoiding usual resting or feeding sites</option>
+                    <option value="Fence pacing & low growls">Fence pacing &amp; low growls</option>
+                    <option value="Thrashing in water suddenly">Thrashing in water suddenly</option>
+                    <option value="Total silence (no vocalization)">Total silence (no vocalization)</option>
+                    <option value="Rushing into tight defensive group">Rushing into tight defensive group</option>
+                    <option value="Crawling out in broad daylight">Crawling out in broad daylight</option>
+                    <option value="Refusing to enter indoor night barns">Refusing to enter indoor night barns</option>
                   </select>
                 </div>
               </div>
             </div>
 
-            <!-- Row 2: Wildlife counts -->
+            <!-- Row 2: Animal Counts -->
             <div class="form-grid-2">
               <div class="form-group">
-                <label for="total-animals" class="form-label">Total individuals of this species observed *</label>
+                <label for="total-animals" class="form-label">Total animals of this type in zoo *</label>
                 <input
                   type="number"
                   id="total-animals"
@@ -89,7 +72,7 @@
               </div>
 
               <div class="form-group">
-                <label for="animals-showing" class="form-label">Individuals showing this behaviour *</label>
+                <label for="animals-showing" class="form-label">Animals showing this behaviour *</label>
                 <input
                   type="number"
                   id="animals-showing"
@@ -166,9 +149,9 @@
                   name="description"
                   class="input"
                   style="min-height: 90px; border-radius: 20px; resize: vertical;"
-                  placeholder="Describe calls, movement, group behaviour, feeding, or posture..."
+                  placeholder="Provide concrete descriptions of vocalizations, tremors, defensive posture..."
                   required
-                >Saltwater crocodile showing repeated agitation and unusual movement along a Sundarbans tidal channel.</textarea>
+                >Crocodile agitated, thrashing water repeatedly with deep bellows, refusing normal feeding.</textarea>
               </div>
 
               <div class="form-group">
@@ -202,7 +185,7 @@
                 Cancel
               </a>
               <button type="submit" class="action-btn" style="background-color: #0ED999;">
-                Submit Observation
+                Submit Verified Anomaly
               </button>
             </div>
           </form>
@@ -274,10 +257,9 @@
       import { requireRole, getCurrentUser } from './js/auth.js';
       import { setupFormValidation, showError, clearError } from './js/forms.js';
       import { predictHazard, submitObservation } from './js/data.js';
-      import { protectedAreas } from './js/protected-areas.js';
       import './js/nav.js';
 
-      if (requireRole('forest_officer')) {
+      if (requireRole('zookeeper')) {
         const fileInput = document.getElementById('media-file');
         const fileNameDisplay = document.getElementById('file-name-display');
         const modal = document.getElementById('hazard-modal');
@@ -289,11 +271,6 @@
         const totalAnimalsInput = document.getElementById('total-animals');
         const animalsShowingInput = document.getElementById('animals-showing');
         const abnormalityInput = document.getElementById('abnormality-percentage');
-        const protectedAreaSelect = document.getElementById('protected-area');
-
-        protectedAreas.forEach((area) => {
-          protectedAreaSelect.add(new Option(`${area.name} — ${area.district}`, area.id));
-        });
 
         function updateAbnormalityPercentage() {
           const totalAnimals = Number(totalAnimalsInput.value) || 0;
@@ -344,9 +321,7 @@
 
             await submitObservation({
               keeper_id: user?.keeper_id,
-              zoo_id: data.protectedAreaId,
-              protected_area_id: data.protectedAreaId,
-              date: new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date()),
+              zoo_id: user?.zoo_id,
               animal_name: data.animal,
               behaviour: data.observedBehaviour,
               intensity: intensityValue,

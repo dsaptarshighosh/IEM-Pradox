@@ -83,7 +83,6 @@ export function normalizeObservation(item = {}) {
     id: valueOr(item.id, item._id, `obs-${Date.now()}-${Math.random()}`),
     keeper_id: valueOr(item.keeper_id, item.keeperId),
     zoo_id: valueOr(item.zoo_id, item.zooId),
-    protected_area_id: valueOr(item.protected_area_id, item.protectedAreaId, item.area_id, item.zoo_id, item.zooId),
     animal: valueOr(item.animal_name, item.animal, item.animalName, 'Unknown animal'),
     observedBehaviour: valueOr(item.behaviour, item.observed_behaviour, item.observedBehaviour, 'No behaviour recorded'),
     abnormalityPercentage: asNumber(
@@ -96,22 +95,17 @@ export function normalizeObservation(item = {}) {
       0
     ),
     hazardProbability,
-    createdAt: valueOr(item.date, item.created_at, item.createdAt),
-    latitude: valueOr(item.latitude, item.lat),
-    longitude: valueOr(item.longitude, item.lng)
+    createdAt: valueOr(item.created_at, item.createdAt, new Date().toISOString())
   };
 }
 
-export function normalizeForestOfficer(item = {}) {
+export function normalizeKeeper(item = {}) {
   return {
     id: valueOr(item.id, item.keeper_id, item.keeperId, item.username, 'unknown'),
     username: valueOr(item.username, item.name, 'unknown'),
     keeper_id: valueOr(item.keeper_id, item.keeperId, item.id, 'unknown'),
     zoo_id: valueOr(item.zoo_id, item.zooId, 'unknown'),
-    protected_area_id: valueOr(item.protected_area_id, item.protectedAreaId, item.zoo_id, item.zooId),
-    designation: valueOr(item.designation, item.position),
-    employee_id: valueOr(item.employee_id, item.employeeId, item.keeper_id, item.keeperId, item.id),
-    name: valueOr(item.name, item.username, item.keeper_id, 'Unknown Forest Officer')
+    name: valueOr(item.name, item.username, item.keeper_id, 'Unknown Keeper')
   };
 }
 
@@ -125,14 +119,14 @@ export async function getObservations() {
   return list.map(normalizeObservation);
 }
 
-export async function getForestOfficers(protectedAreaId) {
-  if (!protectedAreaId) return [];
-  const payload = await requestJson(`/zoo_keepers?zoo_id=${encodeURIComponent(protectedAreaId)}`);
+export async function getZooKeepers(zooId) {
+  if (!zooId) return [];
+  const payload = await requestJson(`/zoo_keepers?zoo_id=${encodeURIComponent(zooId)}`);
   const list = Array.isArray(payload) ? payload : payload?.keepers || payload?.data || [];
-  return list.map(normalizeForestOfficer);
+  return list.map(normalizeKeeper);
 }
 
-export async function forestOfficerLogin(payload) {
+export async function keeperLogin(payload) {
   return requestJson('/keeper_login', {
     method: 'POST',
     body: JSON.stringify(payload)
@@ -174,7 +168,7 @@ export async function adminLogin(payload) {
   });
 }
 
-export async function addForestOfficer(payload) {
+export async function addZooKeeper(payload) {
   return requestJson('/add_zoo_keeper', {
     method: 'POST',
     body: JSON.stringify(payload)

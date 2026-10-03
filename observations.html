@@ -25,14 +25,6 @@
         </header>
 
         <div class="panel-body">
-          <div class="form-group" style="max-width: 420px;">
-            <label for="protected-area-filter" class="form-label">Protected area</label>
-            <div class="select-wrapper">
-              <select id="protected-area-filter" class="pill-input">
-                <option value="">All protected areas</option>
-              </select>
-            </div>
-          </div>
           <div id="observations-container" class="observations-grid">
             <!-- Rendered by js/data.js -->
           </div>
@@ -41,22 +33,12 @@
     </main>
 
     <script type="module">
-      import { requireRole, getCurrentUser } from './js/auth.js';
+      import { requireRole } from './js/auth.js';
       import { getObservations, predictHazard } from './js/data.js';
-      import { protectedAreas, getProtectedAreaName } from './js/protected-areas.js';
       import './js/nav.js';
 
-      if (requireRole('forest_officer')) {
+      if (requireRole('zookeeper')) {
         const container = document.getElementById('observations-container');
-        const areaFilter = document.getElementById('protected-area-filter');
-        const user = getCurrentUser();
-        protectedAreas.forEach((area) => {
-          areaFilter.add(new Option(`${area.name} — ${area.district}`, area.id));
-        });
-        const assignedAreaId = user?.protected_area_id || user?.protectedAreaId || user?.assigned_protected_area_id;
-        if (assignedAreaId && protectedAreas.some(({ id }) => id === assignedAreaId)) {
-          areaFilter.value = assignedAreaId;
-        }
 
         async function reestimateHazardProbability(observation) {
           if (observation.hazardProbability != null) return observation;
@@ -97,26 +79,18 @@
               return;
             }
 
-            const observationsWithProbabilities = await Promise.all(observations.map(reestimateHazardProbability));
-            const filteredObservations = areaFilter.value
-              ? observationsWithProbabilities.filter((obs) => obs.protected_area_id === areaFilter.value)
-              : observationsWithProbabilities;
+            const observationsWithProbabilities = await Promise.all(
+              observations.map(reestimateHazardProbability)
+            );
 
-            if (!filteredObservations.length) {
-              container.innerHTML = '<p style="padding: 16px; color: #024123;">No observations found for this protected area.</p>';
-              return;
-            }
-
-            container.innerHTML = filteredObservations.map(obs => `
+            container.innerHTML = observationsWithProbabilities.map(obs => `
               <div class="observation-card">
-                <p><strong>Wildlife species:</strong> ${obs.animal || 'Unknown species'}</p>
-                <p><strong>Protected area:</strong> ${getProtectedAreaName(obs.protected_area_id) || 'Not available'}</p>
+                <p><strong>Animal:</strong> ${obs.animal || 'Unknown animal'}</p>
                 <p><strong>Observed Behaviour:</strong></p>
                 <p style="margin-top:-4px; color:#194f38;">${obs.observedBehaviour || 'No behaviour recorded'}</p>
                 <p><strong>Abnormality Percentage:</strong> ${Number(obs.abnormalityPercentage ?? 0).toFixed(0)}%</p>
                 <p><strong>Intensity:</strong> ${obs.intensity || 'Not provided'}</p>
                 <p><strong>Duration of behaviour (minutes):</strong> ${Number(obs.durationMinutes ?? 0)}</p>
-                <p><strong>Date:</strong> ${obs.createdAt ? new Date(obs.createdAt).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' }) : 'Not available'}</p>
                 <p class="card-hazard" style="margin-top:4px;">${obs.hazardProbabilityReestimated ? 'Re-estimated hazard probability' : 'Hazard probability'}: ${obs.hazardProbability == null ? 'Not available' : `${Number(obs.hazardProbability).toFixed(2)}%`}</p>
               </div>
             `).join('');
@@ -126,7 +100,6 @@
           }
         }
 
-        areaFilter.addEventListener('change', loadObservations);
         loadObservations();
       }
     </script>

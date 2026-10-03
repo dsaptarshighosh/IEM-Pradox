@@ -1,6 +1,6 @@
 {
-  "name": "Living Lens - West Bengal Wildlife Monitoring",
-  "description": "National Parks, Biodiversity & Wildlife Sanctuaries monitoring platform for West Bengal, India.",
+  "name": "Living Lens - Zoo Animal Behaviour Early Warning System",
+  "description": "Animal behaviour-based early warning system for zoos and citizens: When Nature Speaks, Technology Listens.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
