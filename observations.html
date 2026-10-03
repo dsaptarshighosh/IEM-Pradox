@@ -34,39 +34,11 @@
 
     <script type="module">
       import { requireRole } from './js/auth.js';
-      import { getObservations, predictHazard } from './js/data.js';
+      import { getObservations } from './js/data.js';
       import './js/nav.js';
 
       if (requireRole('zookeeper')) {
         const container = document.getElementById('observations-container');
-
-        async function reestimateHazardProbability(observation) {
-          if (observation.hazardProbability != null) return observation;
-
-          try {
-            const prediction = await predictHazard({
-              animal: observation.animal,
-              behaviour: observation.observedBehaviour,
-              intensity: Number(observation.intensity),
-              abnormality_percentage: observation.abnormalityPercentage,
-              duration_minutes: observation.durationMinutes
-            });
-            const probability = Number(
-              prediction?.hazard_probability ??
-              prediction?.hazardProbability ??
-              prediction?.probability
-            );
-
-            if (!Number.isFinite(probability)) {
-              throw new Error('Prediction response did not include a hazard probability.');
-            }
-
-            return { ...observation, hazardProbability: probability, hazardProbabilityReestimated: true };
-          } catch (error) {
-            console.error(`Failed to re-estimate hazard probability for observation ${observation.id}:`, error);
-            return observation;
-          }
-        }
 
         async function loadObservations() {
           container.innerHTML = '<p style="padding: 16px; color: #024123;">Loading observations...</p>';
@@ -79,9 +51,7 @@
               return;
             }
 
-            const observationsWithProbabilities = await Promise.all(
-              observations.map(reestimateHazardProbability)
-            );
+            const observationsWithProbabilities = observations;
 
             container.innerHTML = observationsWithProbabilities.map(obs => `
               <div class="observation-card">
@@ -91,7 +61,7 @@
                 <p><strong>Abnormality Percentage:</strong> ${Number(obs.abnormalityPercentage ?? 0).toFixed(0)}%</p>
                 <p><strong>Intensity:</strong> ${obs.intensity || 'Not provided'}</p>
                 <p><strong>Duration of behaviour (minutes):</strong> ${Number(obs.durationMinutes ?? 0)}</p>
-                <p class="card-hazard" style="margin-top:4px;">${obs.hazardProbabilityReestimated ? 'Re-estimated hazard probability' : 'Hazard probability'}: ${obs.hazardProbability == null ? 'Not available' : `${Number(obs.hazardProbability).toFixed(2)}%`}</p>
+                <p class="card-hazard" style="margin-top:4px;">Hazard probability: ${obs.hazardProbability == null ? 'Not available' : `${Number(obs.hazardProbability).toFixed(2)}%`}</p>
               </div>
             `).join('');
           } catch (error) {

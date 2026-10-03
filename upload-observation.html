@@ -254,9 +254,10 @@
     </main>
 
     <script type="module">
-      import { requireRole, getCurrentUser } from './js/auth.js';
+      import { requireRole, getCurrentUser, saveUser } from './js/auth.js';
       import { setupFormValidation, showError, clearError } from './js/forms.js';
-      import { predictHazard, submitObservation } from './js/data.js';
+      import { predictHazard } from './js/data.js';
+      import { addZooKeeper, getZooKeepers } from './js/api.js';
       import './js/nav.js';
 
       if (requireRole('zookeeper')) {
@@ -309,24 +310,41 @@
           }
 
           try {
+            if (!user?.zoo_id) {
+              throw new Error('Zoo ID is missing. Please sign in again.');
+            }
+
+            const keeperId = user.keeper_id || `demo-keeper-${Date.now()}`;
+            const keepers = await getZooKeepers(user.zoo_id);
+            const registeredKeeper = keepers.find((keeper) => keeper.keeper_id === keeperId);
+            if (!registeredKeeper) {
+              await addZooKeeper({
+                username: user.username || keeperId,
+                keeper_id: keeperId,
+                zoo_id: user.zoo_id
+              });
+            }
+
+            if (!user.keeper_id) {
+              saveUser({ ...user, keeper_id: keeperId, username: user.username || keeperId });
+            }
+
             const intensityValue = Number((data.intensity || '5 - Moderate').split(' ')[0]);
             const abnormalityPercent = totalAnimals > 0 ? Math.min((animalsShowing / totalAnimals) * 100, 100) : 0;
+            const abnormalityPercentage = Number(abnormalityPercent.toFixed(0));
+            const durationMinutes = Number(data.durationMinutes || 0);
             const hazardResponse = await predictHazard({
+              keeper_id: keeperId,
+              zoo_id: user.zoo_id,
+              animal_name: data.animal,
               animal: data.animal,
               behaviour: data.observedBehaviour,
               intensity: intensityValue,
-              abnormality_percentage: Number(abnormalityPercent.toFixed(0)),
-              duration_minutes: Number(data.durationMinutes || 0)
-            });
-
-            await submitObservation({
-              keeper_id: user?.keeper_id,
-              zoo_id: user?.zoo_id,
-              animal_name: data.animal,
-              behaviour: data.observedBehaviour,
-              intensity: intensityValue,
-              animal_percentage: Number(abnormalityPercent.toFixed(0)),
-              duration: Number(data.durationMinutes || 0)
+              animal_percentage: abnormalityPercentage,
+              abnormality_percentage: abnormalityPercentage,
+              duration: durationMinutes,
+              duration_minutes: durationMinutes,
+              date: new Date().toISOString()
             });
 
             const hazardPct = Number(
