@@ -7,7 +7,12 @@ const STORAGE_KEY = 'livinglens_user';
 export function getCurrentUser() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : null;
+    const user = raw ? JSON.parse(raw) : null;
+    if (user?.role === 'zookeeper') {
+      user.role = 'forest_officer';
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    }
+    return user;
   } catch {
     return null;
   }
@@ -28,15 +33,15 @@ export function signOut() {
 
 /**
  * Enforces role access for guarded pages.
- * @param {string} requiredRole - 'zookeeper' | 'admin' | 'citizen'
+ * @param {string} requiredRole - 'forest_officer' | 'admin' | 'citizen'
  */
 export function requireRole(requiredRole) {
   const user = getCurrentUser();
 
   if (!user || user.role !== requiredRole) {
     // Redirect to corresponding role login page
-    if (requiredRole === 'zookeeper') {
-      window.location.href = 'zookeeper-login.html';
+    if (requiredRole === 'forest_officer') {
+      window.location.href = 'officer-login.html';
     } else if (requiredRole === 'admin') {
       window.location.href = 'admin-login.html';
     } else if (requiredRole === 'citizen') {

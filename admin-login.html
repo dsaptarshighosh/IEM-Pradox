@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign in as Zoo admin - Living Lens</title>
+    <title>Administrator Login - Living Lens</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Iosevka+Charon:wght@400;700&display=swap" rel="stylesheet" />
@@ -19,19 +19,19 @@
       <div class="auth-panel-container">
         <section class="panel">
           <header class="panel-header">
-            <h2>Sign in as Zoo admin</h2>
+            <h2>Administrator Login</h2>
           </header>
 
           <div class="panel-body">
             <form id="admin-login-form" novalidate>
               <div class="form-group">
-                <label for="admin-zoo-id" class="form-label">Zoo ID</label>
+                <label for="admin-protected-area-id" class="form-label">Protected area ID</label>
                 <input
                   type="text"
-                  id="admin-zoo-id"
+                  id="admin-protected-area-id"
                   name="zoo_id"
                   class="pill-input"
-                  placeholder="Enter your Zoo ID"
+                  placeholder="Enter your protected area ID"
                   required
                 />
               </div>
@@ -94,7 +94,7 @@
             signedInAt: new Date().toISOString()
           });
 
-          window.location.href = 'admin-zookeeper-creator.html';
+          window.location.href = 'admin-officer-creator.html';
         } catch (error) {
           const input = document.getElementById('admin-password');
           showError(input, error.message || 'Unable to sign in. Please verify your admin credentials.');
