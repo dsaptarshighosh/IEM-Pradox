@@ -281,6 +281,80 @@
   transform: scale(1);
 }
 
+.hazard-modal-dialog {
+  max-width: 520px;
+}
+
+.hazard-modal-header {
+  justify-content: center;
+  text-align: center;
+}
+
+.hazard-modal-body {
+  padding: 28px 32px;
+  text-align: center;
+}
+
+.hazard-result-card {
+  margin-bottom: 24px;
+  padding: 18px 20px 20px;
+  align-items: center;
+}
+
+.hazard-result-label {
+  margin-bottom: 0;
+  color: var(--color-card-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.hazard-gauge {
+  display: block;
+  width: min(100%, 320px);
+  height: auto;
+  margin: 0 auto -14px;
+  overflow: visible;
+}
+
+.hazard-gauge-needle {
+  stroke: var(--color-panel-body);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.hazard-gauge-hub-outer {
+  fill: var(--color-action-btn);
+  stroke: var(--color-card-text);
+  stroke-width: 2;
+}
+
+.hazard-gauge-hub-inner {
+  fill: var(--color-panel-body);
+}
+
+.hazard-risk-value {
+  color: var(--color-card-text);
+  font-size: clamp(36px, 10vw, 48px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.15;
+}
+
+.hazard-gauge-labels {
+  display: flex;
+  width: min(100%, 280px);
+  justify-content: space-between;
+  margin-top: 10px;
+  color: var(--color-card-subtext);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.hazard-modal-actions {
+  display: flex;
+  justify-content: center;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .navbar-container {
@@ -298,6 +372,9 @@
     gap: 10px;
   }
   .panel-body {
+    padding: 24px 18px;
+  }
+  .hazard-modal-body {
     padding: 24px 18px;
   }
 }

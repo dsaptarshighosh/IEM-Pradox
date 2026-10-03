@@ -192,20 +192,56 @@
 
       <!-- Hazard Probability Popup Modal (Page 7 from design PDF) -->
       <div id="hazard-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <div class="modal-dialog">
-          <div class="panel-header" style="justify-content: center;">
+        <div class="modal-dialog hazard-modal-dialog">
+          <div class="panel-header hazard-modal-header">
             <h2 id="modal-title">Hazard Probability</h2>
           </div>
-          <div class="panel-body" style="padding: 36px 32px; text-align: center;">
-            <div class="card" style="margin-bottom: 28px; padding: 28px 20px; align-items: center;">
-              <p style="font-size: 15px; font-weight: 600; color: #024123; margin-bottom: 12px;">
+          <div class="panel-body hazard-modal-body">
+            <div class="card hazard-result-card">
+              <p id="risk-estimate-label" class="hazard-result-label">
                 Submitted Observation Risk Estimate
               </p>
-              <div id="modal-risk-value" style="font-size: 48px; font-weight: 800; color: #024123; letter-spacing: -1px;">
+              <svg
+                class="hazard-gauge"
+                viewBox="0 0 240 145"
+                role="meter"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+                aria-labelledby="modal-title risk-estimate-label"
+              >
+                <defs>
+                  <linearGradient id="hazard-gauge-gradient" x1="40" y1="120" x2="200" y2="120" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#0ED984" />
+                    <stop offset="50%" stop-color="#C7FF01" />
+                    <stop offset="75%" stop-color="#F5A623" />
+                    <stop offset="100%" stop-color="#FF5252" />
+                  </linearGradient>
+                </defs>
+                <path
+                  class="hazard-gauge-track"
+                  d="M 40 120 A 80 80 0 0 1 200 120"
+                  fill="none"
+                  stroke="url(#hazard-gauge-gradient)"
+                  stroke-width="20"
+                  stroke-linecap="butt"
+                />
+                <g id="hazard-gauge-needle" transform="rotate(-90 120 120)">
+                  <line x1="120" y1="120" x2="120" y2="48" class="hazard-gauge-needle" />
+                </g>
+                <circle cx="120" cy="120" r="8" class="hazard-gauge-hub-outer" />
+                <circle cx="120" cy="120" r="3" class="hazard-gauge-hub-inner" />
+              </svg>
+              <div id="modal-risk-value" class="hazard-risk-value" aria-live="polite">
                 84.12%
               </div>
+              <div class="hazard-gauge-labels" aria-hidden="true">
+                <span>Low</span>
+                <span>Medium</span>
+                <span>High</span>
+              </div>
             </div>
-            <div>
+            <div class="hazard-modal-actions">
               <button id="modal-close-btn" class="action-btn" style="min-width: 140px;">
                 Close
               </button>
@@ -226,6 +262,8 @@
         const fileNameDisplay = document.getElementById('file-name-display');
         const modal = document.getElementById('hazard-modal');
         const modalRiskValue = document.getElementById('modal-risk-value');
+        const modalRiskGauge = document.querySelector('.hazard-gauge');
+        const modalRiskGaugeNeedle = document.getElementById('hazard-gauge-needle');
         const modalCloseBtn = document.getElementById('modal-close-btn');
         const user = getCurrentUser();
         const totalAnimalsInput = document.getElementById('total-animals');
@@ -294,6 +332,9 @@
               duration: Number(data.durationMinutes || 0)
             });
 
+            const gaugePct = Number.isFinite(hazardPct) ? Math.min(Math.max(hazardPct, 0), 100) : 0;
+            modalRiskGauge.setAttribute('aria-valuenow', String(gaugePct));
+            modalRiskGaugeNeedle.setAttribute('transform', `rotate(${gaugePct * 1.8 - 90} 120 120)`);
             modalRiskValue.textContent = `${Number.isFinite(hazardPct) ? hazardPct.toFixed(2) : '0.00'}%`;
             modal.classList.add('active');
           } catch (error) {
