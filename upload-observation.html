@@ -320,7 +320,7 @@
             });
 
             await submitObservation({
-              keeper_id: user?.keeper_id,
+              keeper_id: user?.keeper_id || 'demo-keeper',
               zoo_id: user?.zoo_id,
               animal_name: data.animal,
               behaviour: data.observedBehaviour,
