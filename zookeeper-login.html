@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Forest Officer Login - Living Lens</title>
+    <title>Sign in as Zookeeper - Living Lens</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Iosevka+Charon:wght@400;700&display=swap" rel="stylesheet" />
@@ -19,28 +19,28 @@
       <div class="auth-panel-container">
         <section class="panel">
           <header class="panel-header">
-            <h2>Forest Officer Login</h2>
+            <h2>Sign in as Zookeeper</h2>
           </header>
 
           <div class="panel-body">
-            <form id="officer-login-form" novalidate>
+            <form id="zookeeper-login-form" novalidate>
               <div class="form-group">
-                <label for="protected-area-id" class="form-label">Protected area ID</label>
+                <label for="zoo-select" class="form-label">Zoo ID</label>
                 <input
                   type="text"
-                  id="protected-area-id"
+                  id="zoo-select"
                   name="zoo_id"
                   class="pill-input"
-                  placeholder="Enter your assigned protected area ID"
+                  placeholder="Enter your Zoo ID"
                   required
                 />
               </div>
 
               <div class="form-group">
-                <label for="officer-username" class="form-label">Username</label>
+                <label for="keeper-username" class="form-label">Username</label>
                 <input
                   type="text"
-                  id="officer-username"
+                  id="keeper-username"
                   name="username"
                   class="pill-input"
                   placeholder="Enter your username"
@@ -49,13 +49,13 @@
               </div>
 
               <div class="form-group">
-                <label for="employee-badge-id" class="form-label">Employee or badge ID</label>
+                <label for="badge-id" class="form-label">Keeper ID</label>
                 <input
                   type="text"
-                  id="employee-badge-id"
+                  id="badge-id"
                   name="keeper_id"
                   class="pill-input"
-                  placeholder="Enter your employee or badge ID"
+                  placeholder="e.g. ZK-4819"
                   required
                 />
               </div>
@@ -72,10 +72,10 @@
     <script type="module">
       import { saveUser } from './js/auth.js';
       import { setupFormValidation, showError } from './js/forms.js';
-      import { forestOfficerLogin } from './js/api.js';
+      import { keeperLogin } from './js/api.js';
       import './js/nav.js';
 
-      const form = document.getElementById('officer-login-form');
+      const form = document.getElementById('zookeeper-login-form');
       setupFormValidation(form, async (data) => {
         try {
           const payload = {
@@ -84,23 +84,20 @@
             zoo_id: data.zoo_id
           };
 
-          const response = await forestOfficerLogin(payload);
+          const response = await keeperLogin(payload);
 
           saveUser({
-            ...response,
-            role: 'forest_officer',
+            role: 'zookeeper',
             username: response?.username || payload.username,
             keeper_id: response?.keeper_id || payload.keeper_id,
             zoo_id: response?.zoo_id || payload.zoo_id,
-            protected_area_id: response?.protected_area_id || response?.protectedAreaId || payload.zoo_id,
-            designation: response?.designation || response?.position,
-            employee_id: response?.employee_id || response?.employeeId || payload.keeper_id,
+            ...response,
             signedInAt: new Date().toISOString()
           });
 
           window.location.href = 'observations.html';
         } catch (error) {
-          const input = document.getElementById('employee-badge-id');
+          const input = document.getElementById('badge-id');
           showError(input, error.message || 'Unable to sign in. Please check your credentials.');
         }
       });

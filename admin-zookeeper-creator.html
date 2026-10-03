@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Forest Officer - Living Lens</title>
+    <title>Create Zookeeper Account - Living Lens</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Iosevka+Charon:wght@400;700&display=swap" rel="stylesheet" />
@@ -18,69 +18,59 @@
     <main class="page-wrapper">
       <section class="panel" style="max-width: 1080px;">
         <header class="panel-header">
-          <h2>Create Forest Officer</h2>
+          <h2>Create Zookeeper Account</h2>
         </header>
 
         <div class="panel-body">
           <div id="success-banner" style="display: none; background-color: #0ED984; color: #024123; padding: 14px 20px; border-radius: 12px; font-weight: 600; margin-bottom: 24px; text-align: center;">
-            ✓ Forest Officer account created successfully.
+            ✓ Zookeeper account created successfully! Credentials recorded.
           </div>
 
-          <form id="create-officer-form" novalidate>
+          <form id="create-zookeeper-form" novalidate>
             <div class="form-grid-2">
               <div>
                 <div class="form-group">
-                  <label for="officer-fullname" class="form-label">Full Name *</label>
+                  <label for="zk-fullname" class="form-label">Full Name *</label>
                   <input
                     type="text"
-                    id="officer-fullname"
+                    id="zk-fullname"
                     name="fullName"
                     class="pill-input"
-                    placeholder="e.g. Ananya Sen"
+                    placeholder="e.g. Dr. Marcus Vance"
                     required
                   />
                 </div>
 
                 <div class="form-group">
-                  <label for="officer-email" class="form-label">Email Address *</label>
+                  <label for="zk-email" class="form-label">Email Address *</label>
                   <input
                     type="email"
-                    id="officer-email"
+                    id="zk-email"
                     name="email"
                     class="pill-input"
-                    placeholder="officer@example.in"
+                    placeholder="marcus.vance@zoo-wildlife.org"
                     required
                   />
                 </div>
 
                 <div class="form-group">
-                  <label for="officer-protected-area" class="form-label">Assigned protected area *</label>
+                  <label for="zk-zoo" class="form-label">Assigned Zoo *</label>
                   <div class="select-wrapper">
-                    <select id="officer-protected-area" name="assignedProtectedArea" class="pill-input" required>
-                      <option value="" disabled selected>Select a protected area...</option>
+                    <select id="zk-zoo" name="assignedZoo" class="pill-input" required>
+                      <option value="" disabled selected>Select assigned zoo...</option>
+                      <option value="ZOO-LON-01">Metropolitan City Zoological Gardens</option>
+                      <option value="ZOO-SGP-02">Central Wildlife Conservation Park</option>
+                      <option value="ZOO-SDG-03">Highland Biosphere &amp; Safari Sanctuary</option>
+                      <option value="ZOO-BER-04">Riverside Zoological Park</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="officer-designation" class="form-label">Designation *</label>
-                  <div class="select-wrapper">
-                    <select id="officer-designation" name="designation" class="pill-input" required>
-                      <option value="" disabled selected>Select designation...</option>
-                      <option>Forest Guard</option>
-                      <option>Forester</option>
-                      <option>Range Officer</option>
-                      <option>Assistant Conservator of Forests</option>
-                      <option>Divisional Forest Officer</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="officer-temp-code" class="form-label">Temporary access code *</label>
+                  <label for="zk-temp-code" class="form-label">Temporary Zoo Access code *</label>
                   <input
                     type="password"
-                    id="officer-temp-code"
+                    id="zk-temp-code"
                     name="tempCode"
                     class="pill-input"
                     placeholder="••••••••"
@@ -91,34 +81,34 @@
 
               <div>
                 <div class="form-group">
-                  <label for="officer-badge-id" class="form-label">Employee or badge ID *</label>
+                  <label for="zk-badge-id" class="form-label">Zookeeper ID / Badge *</label>
                   <input
                     type="text"
-                    id="officer-badge-id"
+                    id="zk-badge-id"
                     name="badgeId"
                     class="pill-input"
-                    placeholder="e.g. WB-FOR-001"
+                    placeholder="e.g. ZK-8821"
                     required
                   />
                 </div>
 
                 <div class="form-group">
-                  <label for="officer-phone" class="form-label">Phone number *</label>
+                  <label for="zk-phone" class="form-label">Phone number *</label>
                   <input
                     type="tel"
-                    id="officer-phone"
+                    id="zk-phone"
                     name="phone"
                     class="pill-input"
-                    placeholder="+91 98765 43210"
+                    placeholder="+44 7700 900123"
                     required
                   />
                 </div>
 
                 <div class="form-group">
-                  <label for="officer-confirm-code" class="form-label">Confirm access code *</label>
+                  <label for="zk-confirm-code" class="form-label">Confirm Access code *</label>
                   <input
                     type="password"
-                    id="officer-confirm-code"
+                    id="zk-confirm-code"
                     name="confirmCode"
                     class="pill-input"
                     placeholder="••••••••"
@@ -133,29 +123,28 @@
                 Cancel
               </button>
               <button type="submit" class="action-btn">
-                Create Forest Officer
+                Create Zookeeper Account
               </button>
             </div>
           </form>
-          <p style="color:#194f38; font-size:13px;">The connected officer API stores only account name, legacy employee ID, and site ID; the selected protected area is saved through that site-ID field. Email, phone, access code, and designation are not persisted by the current API.</p>
         </div>
       </section>
 
       <section class="panel" style="max-width: 1080px; margin-top: 32px;">
         <header class="panel-header">
-          <h2>Current Wildlife Observations</h2>
+          <h2>Zoo Observations</h2>
         </header>
         <div class="panel-body">
-          <div id="observations-grid" style="display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));"></div>
+          <div id="zoo-observations-grid" style="display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));"></div>
         </div>
       </section>
 
       <section class="panel" style="max-width: 1080px; margin-top: 32px;">
         <header class="panel-header">
-          <h2>Wildlife Alerts</h2>
+          <h2>Zoo Alerts</h2>
         </header>
         <div class="panel-body">
-          <div id="alerts-grid" style="display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));"></div>
+          <div id="zoo-alerts-grid" style="display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));"></div>
         </div>
       </section>
     </main>
@@ -163,30 +152,24 @@
     <script type="module">
       import { requireRole, getCurrentUser } from './js/auth.js';
       import { setupFormValidation, showError } from './js/forms.js';
-      import { getObservations, getForestOfficers, addForestOfficer, getWildlifeAlerts } from './js/data.js';
-      import { protectedAreas, getProtectedAreaName } from './js/protected-areas.js';
+      import { getObservations, getZooKeepers, addZooKeeper, getZooAlerts } from './js/data.js';
       import './js/nav.js';
 
       if (requireRole('admin')) {
-        const form = document.getElementById('create-officer-form');
+        const form = document.getElementById('create-zookeeper-form');
         const successBanner = document.getElementById('success-banner');
         const cancelBtn = document.getElementById('cancel-btn');
         const user = getCurrentUser();
 
-        const officersContainer = document.createElement('div');
-        officersContainer.style.marginTop = '28px';
-        officersContainer.innerHTML = '<p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Forest Officers</p>';
-        form.parentElement.appendChild(officersContainer);
+        const keepersContainer = document.createElement('div');
+        keepersContainer.style.marginTop = '28px';
+        keepersContainer.innerHTML = '<p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Zoo Keepers</p>';
+        form.parentElement.appendChild(keepersContainer);
 
-        const observationGrid = document.getElementById('observations-grid');
-        const alertGrid = document.getElementById('alerts-grid');
-        const assignedAreaSelect = document.getElementById('officer-protected-area');
+        const observationGrid = document.getElementById('zoo-observations-grid');
+        const alertGrid = document.getElementById('zoo-alerts-grid');
 
-        protectedAreas.forEach((area) => {
-          assignedAreaSelect.add(new Option(`${area.name} — ${area.district}`, area.id));
-        });
-
-        async function renderObservations() {
+        async function renderZooObservations() {
           observationGrid.innerHTML = '<p>Loading current observations...</p>';
 
           try {
@@ -199,13 +182,13 @@
 
             observationGrid.innerHTML = observations.map((obs) => `
               <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 8px; min-height: 170px;">
-                <p><strong>Wildlife species:</strong> ${obs.animal}</p>
-                <p><strong>Protected area:</strong> ${getProtectedAreaName(obs.protected_area_id) || 'Not available'}</p>
+                <p><strong>Animal:</strong> ${obs.animal}</p>
                 <p><strong>Observed Behaviour:</strong> ${obs.observedBehaviour}</p>
                 <p><strong>Abnormality Percentage:</strong> ${obs.abnormalityPercentage}%</p>
                 <p><strong>Duration:</strong> ${obs.durationMinutes} minutes</p>
                 <p><strong>Observation Intensity:</strong> ${obs.intensity}</p>
-                <p><strong>Officer ID:</strong> ${obs.keeper_id || 'Not available'}</p>
+                <p><strong>Keeper ID:</strong> ${obs.keeper_id || 'Not available'}</p>
+                <p><strong>Zoo ID:</strong> ${obs.zoo_id || 'Not available'}</p>
                 <p><strong>Hazard Probability:</strong> ${obs.hazardProbability == null ? 'Not available' : `${Number(obs.hazardProbability).toFixed(2)}%`}</p>
               </div>
             `).join('');
@@ -215,11 +198,11 @@
           }
         }
 
-        function renderWildlifeAlerts() {
-          const alerts = getWildlifeAlerts();
+        function renderZooAlerts() {
+          const alerts = getZooAlerts();
           alertGrid.innerHTML = alerts.map((alert) => `
             <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 8px; min-height: 160px;">
-              <p><strong>Wildlife species:</strong> ${alert.animal}</p>
+              <p><strong>Animal:</strong> ${alert.animal}</p>
               <p><strong>Observed Behaviour:</strong> ${alert.observedBehaviour}</p>
               <p><strong>Hazard/Event Likelihood:</strong> ${alert.hazardLikelihood}</p>
               <p><strong>Date/Time:</strong> ${alert.dateTime}</p>
@@ -228,34 +211,33 @@
           `).join('');
         }
 
-        async function renderOfficers() {
-          const protectedAreaId = user?.protected_area_id || user?.zooId || user?.zoo_id || assignedAreaSelect.value;
-          officersContainer.innerHTML = '<p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Forest Officers</p><p style="color: #024123;">Loading officers...</p>';
+        async function renderKeepers() {
+          const zooId = user?.zooId || user?.zoo_id || 'Z001';
+          keepersContainer.innerHTML = '<p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Zoo Keepers</p><p style="color: #024123;">Loading keepers...</p>';
 
           try {
-            const officers = await getForestOfficers(protectedAreaId);
+            const keepers = await getZooKeepers(zooId);
 
-            if (!officers.length) {
-              officersContainer.innerHTML = '<p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Forest Officers</p><p style="color: #024123;">No forest officers found for this protected area.</p>';
+            if (!keepers.length) {
+              keepersContainer.innerHTML = '<p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Zoo Keepers</p><p style="color: #024123;">No zookeepers found for this zoo.</p>';
               return;
             }
 
-            officersContainer.innerHTML = `
-              <p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Forest Officers</p>
+            keepersContainer.innerHTML = `
+              <p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Zoo Keepers</p>
               <div style="display: grid; gap: 12px;">
-                ${officers.map(officer => `
+                ${keepers.map(keeper => `
                   <div class="card" style="padding: 14px 18px; display: flex; flex-direction: column; gap: 4px;">
-                    <strong style="color: #024123;">${officer.username || officer.name || 'Unknown forest officer'}</strong>
-                    <span style="color: #194f38;">Employee or badge ID: ${officer.employee_id || officer.keeper_id || officer.id || 'N/A'}</span>
-                    <span style="color: #194f38;">Designation: ${officer.designation || 'Not available'}</span>
-                    <span style="color: #194f38;">Assigned protected area: ${getProtectedAreaName(officer.protected_area_id) || officer.protected_area_id || protectedAreaId}</span>
+                    <strong style="color: #024123;">${keeper.username || keeper.name || 'Unknown keeper'}</strong>
+                    <span style="color: #194f38;">ID: ${keeper.keeper_id || keeper.id || 'N/A'}</span>
+                    <span style="color: #194f38;">Zoo: ${keeper.zoo_id || zooId}</span>
                   </div>
                 `).join('')}
               </div>
             `;
           } catch (error) {
-            console.error('Failed to load forest officers:', error);
-            officersContainer.innerHTML = '<p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Forest Officers</p><p style="color: #024123;">Unable to load officers right now.</p>';
+            console.error('Failed to load keepers:', error);
+            keepersContainer.innerHTML = '<p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Zoo Keepers</p><p style="color: #024123;">Unable to load keepers right now.</p>';
           }
         }
 
@@ -264,8 +246,8 @@
         });
 
         setupFormValidation(form, async (data) => {
-          const tempCodeInput = document.getElementById('officer-temp-code');
-          const confirmCodeInput = document.getElementById('officer-confirm-code');
+          const tempCodeInput = document.getElementById('zk-temp-code');
+          const confirmCodeInput = document.getElementById('zk-confirm-code');
 
           if (data.tempCode !== data.confirmCode) {
             showError(confirmCodeInput, 'Access codes do not match');
@@ -273,35 +255,31 @@
           }
 
           try {
-            const protectedAreaId = data.assignedProtectedArea;
             const payload = {
               username: data.fullName || data.email || data.badgeId,
               keeper_id: data.badgeId,
-              employee_id: data.badgeId,
-              zoo_id: protectedAreaId,
-              protected_area_id: protectedAreaId,
-              designation: data.designation
+              zoo_id: user?.zooId || data.assignedZoo || 'Z001'
             };
 
-            await addForestOfficer(payload);
+            await addZooKeeper(payload);
             successBanner.style.display = 'block';
             form.reset();
-            await renderOfficers();
-            await renderObservations();
-            renderWildlifeAlerts();
+            await renderKeepers();
+            await renderZooObservations();
+            renderZooAlerts();
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             setTimeout(() => {
               successBanner.style.display = 'none';
             }, 4000);
           } catch (error) {
-            showError(tempCodeInput, error.message || 'Unable to create the forest officer account.');
+            showError(tempCodeInput, error.message || 'Unable to create the zookeeper account.');
           }
         });
 
-        renderOfficers();
-        renderObservations();
-        renderWildlifeAlerts();
+        renderKeepers();
+        renderZooObservations();
+        renderZooAlerts();
       }
     </script>
   </body>

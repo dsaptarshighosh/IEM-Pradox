@@ -2,8 +2,6 @@
  * Shared Navbar Component for Living Lens
  * Injected automatically into every page.
  */
-import { getCurrentUser } from './auth.js';
-import { getProtectedAreaName } from './protected-areas.js';
 
 export function renderNavbar() {
   const existingNav = document.getElementById('navbar');
@@ -17,14 +15,15 @@ export function renderNavbar() {
   // Determine current page & auth state
   const pathname = window.location.pathname;
   const page = pathname.split('/').pop() || 'index.html';
-  const user = getCurrentUser();
+  const userJson = localStorage.getItem('livinglens_user');
+  const user = userJson ? JSON.parse(userJson) : null;
 
   // Build nav action buttons based on design PDF
   let actionsHtml = '';
 
   const isAuthPage = [
     'signin.html',
-    'officer-login.html',
+    'zookeeper-login.html',
     'admin-login.html',
     'citizen-login.html',
     'citizen-register.html'
@@ -35,8 +34,8 @@ export function renderNavbar() {
   if (isIndex) {
     if (user) {
       const dashboardLink = 
-        user.role === 'forest_officer' ? 'observations.html' :
-        user.role === 'admin' ? 'admin-officer-creator.html' :
+        user.role === 'zookeeper' ? 'observations.html' :
+        user.role === 'admin' ? 'admin-zookeeper-creator.html' :
         'citizen-home.html';
       actionsHtml = `
         <a href="${dashboardLink}" class="nav-btn">Dashboard</a>
@@ -66,7 +65,7 @@ export function renderNavbar() {
       `;
     }
   } else {
-    // Logged in pages: observations, upload-observation, citizen-home, admin-officer-creator
+    // Logged in pages: observations, upload-observation, citizen-home, admin-zookeeper-creator
     actionsHtml = `
       <a href="index.html" class="nav-btn">Home</a>
       <a href="live-map.html" class="nav-btn">Live Map</a>
@@ -82,16 +81,6 @@ export function renderNavbar() {
       </div>
     </nav>
   `;
-
-  if (user?.role === 'forest_officer') {
-    const actions = target.querySelector('.navbar-actions');
-    const profile = document.createElement('span');
-    const areaId = user.protected_area_id || user.protectedAreaId || user.assigned_protected_area_id;
-    const assignment = user.protectedAreaName || user.protected_area_name || getProtectedAreaName(areaId) || areaId || '';
-    profile.className = 'navbar-profile';
-    profile.textContent = [user.designation || 'Forest Officer', assignment].filter(Boolean).join(' · ');
-    actions.prepend(profile);
-  }
 
   // Attach sign out event listener if present
   const signOutBtn = document.getElementById('nav-sign-out-btn');
