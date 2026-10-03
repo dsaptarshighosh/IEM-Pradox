@@ -173,15 +173,13 @@
           const observations = getZooObservations();
           observationGrid.innerHTML = observations.map((obs) => `
             <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 8px; min-height: 170px;">
-              <p><strong>Animal:</strong> ${obs.animal}</p>
-              <p><strong>Observed Behaviour:</strong> ${obs.observedBehaviour}</p>
-              <p><strong>Abnormality Percentage:</strong> ${obs.abnormalityPercentage}%</p>
-              <p><strong>Duration:</strong> ${obs.duration}</p>
-              <p><strong>Observation Intensity:</strong> ${obs.observationIntensity}</p>
-              <p><strong>Hazard/Event Likelihood:</strong> ${obs.hazardLikelihood}</p>
-              <p><strong>Submitted By:</strong> ${obs.submittedBy}</p>
-              <p><strong>Date/Time:</strong> ${obs.dateTime}</p>
-              <p><strong>Section/Enclosure:</strong> ${obs.section}</p>
+              <p><strong>Animal:</strong> ${obs.animal_name}</p>
+              <p><strong>Observed Behaviour:</strong> ${obs.behaviour}</p>
+              <p><strong>Abnormality Percentage:</strong> ${obs.animal_percentage}%</p>
+              <p><strong>Duration:</strong> ${obs.duration} minutes</p>
+              <p><strong>Observation Intensity:</strong> ${obs.intensity}</p>
+              <p><strong>Keeper ID:</strong> ${obs.keeper_id}</p>
+              <p><strong>Zoo ID:</strong> ${obs.zoo_id}</p>
             </div>
           `).join('');
         }

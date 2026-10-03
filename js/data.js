@@ -21,48 +21,40 @@ export const ZOOS = [
 
 export const ZOO_OBSERVATIONS = [
   {
-    animal: 'Elephant',
-    observedBehaviour: 'Repeated pacing and unusual vocalization',
-    abnormalityPercentage: 72,
-    duration: '18 minutes',
-    observationIntensity: 'High',
-    hazardLikelihood: '78%',
-    submittedBy: 'Rahul Das',
-    dateTime: '02 Oct 2026, 08:42 PM',
-    section: 'Elephant Zone'
+    keeper_id: '1',
+    zoo_id: 'Z001',
+    animal_name: 'Elephant',
+    behaviour: 'Repeated pacing and unusual vocalization',
+    intensity: 8,
+    animal_percentage: 72,
+    duration: 18
   },
   {
-    animal: 'Giraffe',
-    observedBehaviour: 'Repeated directional movement and agitation',
-    abnormalityPercentage: 68,
-    duration: '12 minutes',
-    observationIntensity: 'Moderate',
-    hazardLikelihood: '81%',
-    submittedBy: 'Meena Roy',
-    dateTime: '02 Oct 2026, 09:10 PM',
-    section: 'Savanna Track'
+    keeper_id: '1',
+    zoo_id: 'Z001',
+    animal_name: 'Giraffe',
+    behaviour: 'Repeated directional movement and agitation',
+    intensity: 6,
+    animal_percentage: 68,
+    duration: 12
   },
   {
-    animal: 'Crocodile',
-    observedBehaviour: 'Thrashing water and sudden bellowing',
-    abnormalityPercentage: 64,
-    duration: '22 minutes',
-    observationIntensity: 'High',
-    hazardLikelihood: '86%',
-    submittedBy: 'Amit Nair',
-    dateTime: '02 Oct 2026, 07:55 PM',
-    section: 'Reptile Pond'
+    keeper_id: '1',
+    zoo_id: 'Z001',
+    animal_name: 'Crocodile',
+    behaviour: 'Thrashing water and sudden bellowing',
+    intensity: 8,
+    animal_percentage: 64,
+    duration: 22
   },
   {
-    animal: 'Snake',
-    observedBehaviour: 'Crawling out in broad daylight',
-    abnormalityPercentage: 38,
-    duration: '9 minutes',
-    observationIntensity: 'Moderate',
-    hazardLikelihood: '63%',
-    submittedBy: 'Priya Sen',
-    dateTime: '02 Oct 2026, 06:30 PM',
-    section: 'Terrarium Wing'
+    keeper_id: '1',
+    zoo_id: 'Z001',
+    animal_name: 'Snake',
+    behaviour: 'Crawling out in broad daylight',
+    intensity: 6,
+    animal_percentage: 38,
+    duration: 9
   }
 ];
 
