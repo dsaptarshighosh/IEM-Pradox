@@ -36,7 +36,7 @@ export function requireRole(requiredRole) {
   if (!user || user.role !== requiredRole) {
     // Redirect to corresponding role login page
     if (requiredRole === 'zookeeper') {
-      window.location.href = 'zookeeper-login.html';
+      window.location.href = 'signin.html';
     } else if (requiredRole === 'admin') {
       window.location.href = 'admin-login.html';
     } else if (requiredRole === 'citizen') {
