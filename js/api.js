@@ -68,10 +68,16 @@ function valueOr(...candidates) {
 }
 
 export function normalizeObservation(item = {}) {
-  const hazardProbability = asNumber(
-    valueOr(item.hazard_probability, item.hazardProbability, item.probability, item.hazard_prob, item.risk_score, 0),
-    0
+  const rawHazardProbability = valueOr(
+    item.hazard_probability,
+    item.hazardProbability,
+    item.probability,
+    item.hazard_prob,
+    item.risk_score
   );
+  const hazardProbability = rawHazardProbability === undefined
+    ? null
+    : asNumber(rawHazardProbability, null);
 
   return {
     id: valueOr(item.id, item._id, `obs-${Date.now()}-${Math.random()}`),
