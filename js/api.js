@@ -2,7 +2,7 @@ const DEFAULT_API_BASE_URL = 'https://zoo-sentinel-server.onrender.com';
 
 export const API_BASE_URL = (() => {
   const envBase = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.VITE_API_BASE_URL : '';
-  const base = (import.meta.env?.DEV ? '/api' : envBase || DEFAULT_API_BASE_URL).replace(/\/+$/, '');
+  const base = (import.meta.env?.DEV || import.meta.env?.PROD ? '/api' : envBase || DEFAULT_API_BASE_URL).replace(/\/+$/, '');
   return base || DEFAULT_API_BASE_URL;
 })();
 
