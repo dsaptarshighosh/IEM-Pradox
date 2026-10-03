@@ -28,7 +28,6 @@
 
           <form id="create-zookeeper-form" novalidate>
             <div class="form-grid-2">
-              <!-- Left Column -->
               <div>
                 <div class="form-group">
                   <label for="zk-fullname" class="form-label">Full Name *</label>
@@ -80,7 +79,6 @@
                 </div>
               </div>
 
-              <!-- Right Column -->
               <div>
                 <div class="form-group">
                   <label for="zk-badge-id" class="form-label">Zookeeper ID / Badge *</label>
@@ -107,21 +105,6 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="zk-section" class="form-label">Section / Enclosure Assigned *</label>
-                  <div class="select-wrapper">
-                    <select id="zk-section" name="section" class="pill-input" required>
-                      <option value="" disabled selected>Select section / enclosure...</option>
-                      <option value="Reptile House & Terrarium">Reptile House &amp; Terrarium</option>
-                      <option value="Elephant Valley">Elephant Valley</option>
-                      <option value="Big Cats & Predators">Big Cats &amp; Predators</option>
-                      <option value="Savanna & Ungulates">Savanna &amp; Ungulates</option>
-                      <option value="Aviary & Tropical Forest">Aviary &amp; Tropical Forest</option>
-                      <option value="Primate Habitat">Primate Habitat</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
                   <label for="zk-confirm-code" class="form-label">Confirm Access code *</label>
                   <input
                     type="password"
@@ -135,7 +118,6 @@
               </div>
             </div>
 
-            <!-- Buttons -->
             <div class="form-actions-row">
               <button type="button" id="cancel-btn" class="action-btn">
                 Cancel
@@ -147,17 +129,105 @@
           </form>
         </div>
       </section>
+
+      <section class="panel" style="max-width: 1080px; margin-top: 32px;">
+        <header class="panel-header">
+          <h2>Zoo Observations</h2>
+        </header>
+        <div class="panel-body">
+          <div id="zoo-observations-grid" style="display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));"></div>
+        </div>
+      </section>
+
+      <section class="panel" style="max-width: 1080px; margin-top: 32px;">
+        <header class="panel-header">
+          <h2>Zoo Alerts</h2>
+        </header>
+        <div class="panel-body">
+          <div id="zoo-alerts-grid" style="display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));"></div>
+        </div>
+      </section>
     </main>
 
     <script type="module">
-      import { requireRole } from './js/auth.js';
+      import { requireRole, getCurrentUser } from './js/auth.js';
       import { setupFormValidation, showError } from './js/forms.js';
+      import { getZooKeepers, addZooKeeper, getZooObservations, getZooAlerts } from './js/data.js';
       import './js/nav.js';
 
       if (requireRole('admin')) {
         const form = document.getElementById('create-zookeeper-form');
         const successBanner = document.getElementById('success-banner');
         const cancelBtn = document.getElementById('cancel-btn');
+        const user = getCurrentUser();
+
+        const keepersContainer = document.createElement('div');
+        keepersContainer.style.marginTop = '28px';
+        keepersContainer.innerHTML = '<p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Zoo Keepers</p>';
+        form.parentElement.appendChild(keepersContainer);
+
+        const observationGrid = document.getElementById('zoo-observations-grid');
+        const alertGrid = document.getElementById('zoo-alerts-grid');
+
+        function renderZooObservations() {
+          const observations = getZooObservations();
+          observationGrid.innerHTML = observations.map((obs) => `
+            <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 8px; min-height: 170px;">
+              <p><strong>Animal:</strong> ${obs.animal}</p>
+              <p><strong>Observed Behaviour:</strong> ${obs.observedBehaviour}</p>
+              <p><strong>Abnormality Percentage:</strong> ${obs.abnormalityPercentage}%</p>
+              <p><strong>Duration:</strong> ${obs.duration}</p>
+              <p><strong>Observation Intensity:</strong> ${obs.observationIntensity}</p>
+              <p><strong>Hazard/Event Likelihood:</strong> ${obs.hazardLikelihood}</p>
+              <p><strong>Submitted By:</strong> ${obs.submittedBy}</p>
+              <p><strong>Date/Time:</strong> ${obs.dateTime}</p>
+              <p><strong>Section/Enclosure:</strong> ${obs.section}</p>
+            </div>
+          `).join('');
+        }
+
+        function renderZooAlerts() {
+          const alerts = getZooAlerts();
+          alertGrid.innerHTML = alerts.map((alert) => `
+            <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 8px; min-height: 160px;">
+              <p><strong>Animal:</strong> ${alert.animal}</p>
+              <p><strong>Observed Behaviour:</strong> ${alert.observedBehaviour}</p>
+              <p><strong>Hazard/Event Likelihood:</strong> ${alert.hazardLikelihood}</p>
+              <p><strong>Date/Time:</strong> ${alert.dateTime}</p>
+              <p><strong>Advisory / Message:</strong> ${alert.advisory}</p>
+            </div>
+          `).join('');
+        }
+
+        async function renderKeepers() {
+          const zooId = user?.zooId || user?.zoo_id || 'Z001';
+          keepersContainer.innerHTML = '<p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Zoo Keepers</p><p style="color: #024123;">Loading keepers...</p>';
+
+          try {
+            const keepers = await getZooKeepers(zooId);
+
+            if (!keepers.length) {
+              keepersContainer.innerHTML = '<p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Zoo Keepers</p><p style="color: #024123;">No zookeepers found for this zoo.</p>';
+              return;
+            }
+
+            keepersContainer.innerHTML = `
+              <p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Zoo Keepers</p>
+              <div style="display: grid; gap: 12px;">
+                ${keepers.map(keeper => `
+                  <div class="card" style="padding: 14px 18px; display: flex; flex-direction: column; gap: 4px;">
+                    <strong style="color: #024123;">${keeper.username || keeper.name || 'Unknown keeper'}</strong>
+                    <span style="color: #194f38;">ID: ${keeper.keeper_id || keeper.id || 'N/A'}</span>
+                    <span style="color: #194f38;">Zoo: ${keeper.zoo_id || zooId}</span>
+                  </div>
+                `).join('')}
+              </div>
+            `;
+          } catch (error) {
+            console.error('Failed to load keepers:', error);
+            keepersContainer.innerHTML = '<p style="font-weight: 700; color: #024123; margin-bottom: 12px;">Zoo Keepers</p><p style="color: #024123;">Unable to load keepers right now.</p>';
+          }
+        }
 
         cancelBtn.addEventListener('click', () => {
           form.reset();
@@ -172,14 +242,32 @@
             return;
           }
 
-          successBanner.style.display = 'block';
-          form.reset();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          try {
+            const payload = {
+              username: data.fullName || data.email || data.badgeId,
+              keeper_id: data.badgeId,
+              zoo_id: user?.zooId || data.assignedZoo || 'Z001'
+            };
 
-          setTimeout(() => {
-            successBanner.style.display = 'none';
-          }, 4000);
+            await addZooKeeper(payload);
+            successBanner.style.display = 'block';
+            form.reset();
+            await renderKeepers();
+            renderZooObservations();
+            renderZooAlerts();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            setTimeout(() => {
+              successBanner.style.display = 'none';
+            }, 4000);
+          } catch (error) {
+            showError(tempCodeInput, error.message || 'Unable to create the zookeeper account.');
+          }
         });
+
+        renderKeepers();
+        renderZooObservations();
+        renderZooAlerts();
       }
     </script>
   </body>

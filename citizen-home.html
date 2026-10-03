@@ -17,11 +17,22 @@
 
     <main class="page-wrapper">
       <section class="panel">
+        <div id="citizen-status-banner" style="display: none; background-color: #0ED984; color: #024123; padding: 16px 20px; border-radius: 12px; font-weight: 600; line-height: 1.5; margin-bottom: 20px; text-align: center;">
+          <strong>Registration Successful.</strong><br />
+          You are registered with Living Lens.<br />
+          Relevant hazard alerts can be provided when important information is available.
+        </div>
+
         <header class="panel-header">
           <h2>Zoo Alerts Near You</h2>
-          <a href="live-map.html" class="action-btn" style="font-size: 15px; padding: 8px 18px;">
-            View Live Map
-          </a>
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <button id="send-email-btn" type="button" class="action-btn" style="font-size: 15px; padding: 8px 18px; background: #f06a6a;">
+              Send Emergency Email
+            </button>
+            <a href="live-map.html" class="action-btn" style="font-size: 15px; padding: 8px 18px;">
+              View Live Map
+            </a>
+          </div>
         </header>
 
         <div class="panel-body">
@@ -33,25 +44,66 @@
     </main>
 
     <script type="module">
-      import { requireRole } from './js/auth.js';
+      import { requireRole, getCurrentUser } from './js/auth.js';
       import { getAlerts } from './js/data.js';
+      import { sendEmergencyEmail } from './js/api.js';
       import './js/nav.js';
 
       if (requireRole('citizen')) {
+        const user = getCurrentUser();
+        const banner = document.getElementById('citizen-status-banner');
         const container = document.getElementById('alerts-container');
+        const sendEmailBtn = document.getElementById('send-email-btn');
+
+        if (user && user.registeredWithLivingLens) {
+          banner.style.display = 'block';
+        }
 
         async function loadAlerts() {
-          const alerts = await getAlerts();
-          container.innerHTML = alerts.map(alert => `
-            <div class="alert-card">
-              <p><strong>Animal:</strong> ${alert.animal}</p>
-              <p><strong>Observed Behaviour:</strong></p>
-              <p style="margin-top:-4px; color:#194f38;">${alert.observedBehaviour}</p>
-              <p><strong>Distance from you:</strong> ${alert.distanceKm.toFixed(1)} km</p>
-              <p><strong>Advisory:</strong> ${alert.advisory}</p>
-              <p class="card-hazard" style="margin-top:4px;">Hazard probability: ${Number(alert.hazardProbability).toFixed(2)}%</p>
-            </div>
-          `).join('');
+          container.innerHTML = '<p style="padding: 16px; color: #024123;">Loading alerts...</p>';
+
+          try {
+            const alerts = await getAlerts();
+            if (!alerts || alerts.length === 0) {
+              container.innerHTML = '<p style="padding: 16px; color: #024123;">No active alerts right now.</p>';
+              return;
+            }
+
+            container.innerHTML = alerts.map(alert => `
+              <div class="alert-card">
+                <p><strong>Animal:</strong> ${alert.animal}</p>
+                <p><strong>Observed Behaviour:</strong></p>
+                <p style="margin-top:-4px; color:#194f38;">${alert.observedBehaviour}</p>
+                <p><strong>Distance from you:</strong> ${Number(alert.distanceKm || 0).toFixed(1)} km</p>
+                <p><strong>Advisory:</strong> ${alert.advisory}</p>
+                <p class="card-hazard" style="margin-top:4px;">Hazard probability: ${Number(alert.hazardProbability || 0).toFixed(2)}%</p>
+              </div>
+            `).join('');
+          } catch (error) {
+            console.error('Failed to load alerts:', error);
+            container.innerHTML = '<p style="padding: 16px; color: #024123;">Unable to load alerts right now.</p>';
+          }
+        }
+
+        if (sendEmailBtn) {
+          sendEmailBtn.addEventListener('click', async () => {
+            const originalLabel = sendEmailBtn.textContent;
+            sendEmailBtn.disabled = true;
+            sendEmailBtn.textContent = 'Sending...';
+
+            try {
+              await sendEmergencyEmail();
+              sendEmailBtn.textContent = 'Emergency email sent';
+            } catch (error) {
+              console.error('Emergency email error:', error);
+              sendEmailBtn.textContent = 'Retry emergency email';
+            } finally {
+              setTimeout(() => {
+                sendEmailBtn.disabled = false;
+                sendEmailBtn.textContent = originalLabel;
+              }, 2500);
+            }
+          });
         }
 
         loadAlerts();

@@ -73,18 +73,32 @@
 
     <script type="module">
       import { saveUser } from './js/auth.js';
-      import { setupFormValidation } from './js/forms.js';
+      import { setupFormValidation, showError } from './js/forms.js';
+      import { citizenLogin } from './js/api.js';
       import './js/nav.js';
 
       const form = document.getElementById('citizen-login-form');
       setupFormValidation(form, async (data) => {
-        saveUser({
-          role: 'citizen',
-          username: data.username,
-          email: data.email,
-          signedInAt: new Date().toISOString()
-        });
-        window.location.href = 'citizen-home.html';
+        try {
+          const response = await citizenLogin({
+            email: data.email,
+            password: data.password
+          });
+
+          saveUser({
+            role: 'citizen',
+            username: data.username || response?.username || data.email.split('@')[0],
+            email: data.email,
+            registeredWithLivingLens: true,
+            ...response,
+            signedInAt: new Date().toISOString()
+          });
+
+          window.location.href = 'citizen-home.html';
+        } catch (error) {
+          const input = document.getElementById('citizen-password');
+          showError(input, error.message || 'Unable to sign in. Please check your email and password.');
+        }
       });
     </script>
   </body>

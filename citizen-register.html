@@ -23,6 +23,13 @@
           </header>
 
           <div class="panel-body">
+            <div id="registration-success-banner" style="display: none; background-color: #0ED984; color: #024123; padding: 14px 20px; border-radius: 12px; font-weight: 600; margin-bottom: 20px; text-align: center; line-height: 1.5;">
+              <strong>Thank you for registering with Living Lens.</strong><br />
+              Your registration helps us keep you informed about potential environmental hazards detected in your area.<br />
+              If a relevant hazard is identified, Living Lens will use the available alert system to notify you with important information and safety guidance.<br />
+              <strong>Stay safe. Stay informed.</strong>
+            </div>
+
             <a href="citizen-login.html" class="auth-header-link">Already have an account? Sign in</a>
 
             <form id="citizen-register-form" novalidate>
@@ -135,23 +142,54 @@
 
     <script type="module">
       import { saveUser } from './js/auth.js';
-      import { setupFormValidation } from './js/forms.js';
+      import { setupFormValidation, showError } from './js/forms.js';
+      import { citizenRegister } from './js/api.js';
       import './js/nav.js';
 
       const form = document.getElementById('citizen-register-form');
+      const banner = document.getElementById('registration-success-banner');
+
       setupFormValidation(form, async (data) => {
-        saveUser({
-          role: 'citizen',
-          username: data.username,
-          email: data.email,
-          phone: data.phone,
-          location: data.location,
-          nearestZoo: data.nearestZoo,
-          lat: data.latitude,
-          lng: data.longitude,
-          signedInAt: new Date().toISOString()
-        });
-        window.location.href = 'citizen-home.html';
+        try {
+          const payload = {
+            username: data.username,
+            email: data.email,
+            password: data.password,
+            latitude: Number(data.latitude || 0),
+            longitude: Number(data.longitude || 0)
+          };
+
+          if (!payload.latitude || !payload.longitude) {
+            const latInput = document.getElementById('reg-lat');
+            const lngInput = document.getElementById('reg-lng');
+            showError(latInput, 'Please provide a valid latitude');
+            showError(lngInput, 'Please provide a valid longitude');
+            return;
+          }
+
+          const response = await citizenRegister(payload);
+
+          saveUser({
+            role: 'citizen',
+            username: data.username,
+            email: data.email,
+            phone: data.phone,
+            location: data.location,
+            nearestZoo: data.nearestZoo,
+            latitude: Number(data.latitude),
+            longitude: Number(data.longitude),
+            registeredWithLivingLens: true,
+            ...response,
+            signedInAt: new Date().toISOString()
+          });
+
+          banner.style.display = 'block';
+          form.reset();
+          form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } catch (error) {
+          const input = document.getElementById('reg-password');
+          showError(input, error.message || 'Registration failed. Please try again.');
+        }
       });
     </script>
   </body>

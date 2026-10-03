@@ -37,23 +37,35 @@
       import { getObservations } from './js/data.js';
       import './js/nav.js';
 
-      // Ensure user is signed in as zookeeper
       if (requireRole('zookeeper')) {
         const container = document.getElementById('observations-container');
 
         async function loadObservations() {
-          const observations = await getObservations();
-          container.innerHTML = observations.map(obs => `
-            <div class="observation-card">
-              <p><strong>Animal:</strong> ${obs.animal}</p>
-              <p><strong>Observed Behaviour:</strong></p>
-              <p style="margin-top:-4px; color:#194f38;">${obs.observedBehaviour}</p>
-              <p><strong>Abnormality Percentage:</strong> ${obs.abnormalityPercentage}</p>
-              <p><strong>Intensity:</strong> ${obs.intensity}</p>
-              <p><strong>Duration of behaviour (minutes):</strong> ${obs.durationMinutes}</p>
-              <p class="card-hazard" style="margin-top:4px;">Hazard probability: ${Number(obs.hazardProbability).toFixed(2)}%</p>
-            </div>
-          `).join('');
+          container.innerHTML = '<p style="padding: 16px; color: #024123;">Loading observations...</p>';
+
+          try {
+            const observations = await getObservations();
+
+            if (!observations || observations.length === 0) {
+              container.innerHTML = '<p style="padding: 16px; color: #024123;">No observations found.</p>';
+              return;
+            }
+
+            container.innerHTML = observations.map(obs => `
+              <div class="observation-card">
+                <p><strong>Animal:</strong> ${obs.animal || 'Unknown animal'}</p>
+                <p><strong>Observed Behaviour:</strong></p>
+                <p style="margin-top:-4px; color:#194f38;">${obs.observedBehaviour || 'No behaviour recorded'}</p>
+                <p><strong>Abnormality Percentage:</strong> ${Number(obs.abnormalityPercentage ?? 0).toFixed(0)}%</p>
+                <p><strong>Intensity:</strong> ${obs.intensity || 'Not provided'}</p>
+                <p><strong>Duration of behaviour (minutes):</strong> ${Number(obs.durationMinutes ?? 0)}</p>
+                <p class="card-hazard" style="margin-top:4px;">Hazard probability: ${Number(obs.hazardProbability ?? 0).toFixed(2)}%</p>
+              </div>
+            `).join('');
+          } catch (error) {
+            console.error('Failed to fetch observations:', error);
+            container.innerHTML = '<p style="padding: 16px; color: #024123;">Unable to load observations right now. Please try again later.</p>';
+          }
         }
 
         loadObservations();

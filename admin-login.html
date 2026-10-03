@@ -72,18 +72,35 @@
 
     <script type="module">
       import { saveUser } from './js/auth.js';
-      import { setupFormValidation } from './js/forms.js';
+      import { setupFormValidation, showError } from './js/forms.js';
+      import { adminLogin } from './js/api.js';
       import './js/nav.js';
 
       const form = document.getElementById('admin-login-form');
       setupFormValidation(form, async (data) => {
-        saveUser({
-          role: 'admin',
-          zooId: data.zooId,
-          email: data.email,
-          signedInAt: new Date().toISOString()
-        });
-        window.location.href = 'admin-zookeeper-creator.html';
+        try {
+          const payload = {
+            username: data.email || data.username || 'admin',
+            admin_key: data.password || data.adminKey || '',
+            zoo_id: data.zooId || data.zoo_id || 'Z001'
+          };
+
+          const response = await adminLogin(payload);
+
+          saveUser({
+            role: 'admin',
+            username: response?.username || payload.username,
+            zooId: response?.zoo_id || payload.zoo_id,
+            email: data.email,
+            ...response,
+            signedInAt: new Date().toISOString()
+          });
+
+          window.location.href = 'admin-zookeeper-creator.html';
+        } catch (error) {
+          const input = document.getElementById('admin-password');
+          showError(input, error.message || 'Unable to sign in. Please verify your admin credentials.');
+        }
       });
     </script>
   </body>

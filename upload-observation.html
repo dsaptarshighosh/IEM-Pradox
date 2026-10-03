@@ -33,11 +33,7 @@
                     <option value="Elephant">Elephant</option>
                     <option value="Giraffe">Giraffe</option>
                     <option value="Crocodile">Crocodile</option>
-                    <option value="Birds">Birds</option>
-                    <option value="Tigers & Big Cats">Tigers &amp; Big Cats</option>
-                    <option value="Snakes & Reptiles">Snakes &amp; Reptiles</option>
-                    <option value="Monkey">Monkey</option>
-                    <option value="Deer">Deer</option>
+                    <option value="Snake">Snake</option>
                   </select>
                 </div>
               </div>
@@ -98,9 +94,10 @@
                   id="abnormality-percentage"
                   name="abnormalityPercentage"
                   class="pill-input"
-                  min="1"
+                  min="0"
                   max="100"
                   value="70"
+                  readonly
                   required
                 />
               </div>
@@ -219,10 +216,9 @@
     </main>
 
     <script type="module">
-      import { requireRole } from './js/auth.js';
-      import { setupFormValidation } from './js/forms.js';
-      import { calculateHazardProbability } from './js/hazard.js';
-      import { submitObservation } from './js/data.js';
+      import { requireRole, getCurrentUser } from './js/auth.js';
+      import { setupFormValidation, showError, clearError } from './js/forms.js';
+      import { submitObservation, predictHazard } from './js/data.js';
       import './js/nav.js';
 
       if (requireRole('zookeeper')) {
@@ -231,8 +227,27 @@
         const modal = document.getElementById('hazard-modal');
         const modalRiskValue = document.getElementById('modal-risk-value');
         const modalCloseBtn = document.getElementById('modal-close-btn');
+        const user = getCurrentUser();
+        const totalAnimalsInput = document.getElementById('total-animals');
+        const animalsShowingInput = document.getElementById('animals-showing');
+        const abnormalityInput = document.getElementById('abnormality-percentage');
 
-        // Update file name display
+        function updateAbnormalityPercentage() {
+          const totalAnimals = Number(totalAnimalsInput.value) || 0;
+          const animalsShowing = Number(animalsShowingInput.value) || 0;
+          const validTotal = totalAnimals > 0 ? totalAnimals : 0;
+          const percent = validTotal > 0 ? (animalsShowing / validTotal) * 100 : 0;
+          abnormalityInput.value = Math.min(Math.max(percent, 0), 100).toFixed(0);
+        }
+
+        [totalAnimalsInput, animalsShowingInput].forEach((input) => {
+          input.addEventListener('input', () => {
+            clearError(input);
+            clearError(animalsShowingInput);
+            updateAbnormalityPercentage();
+          });
+        });
+
         fileInput.addEventListener('change', () => {
           if (fileInput.files && fileInput.files[0]) {
             fileNameDisplay.textContent = fileInput.files[0].name;
@@ -241,29 +256,53 @@
           }
         });
 
-        // Form submission & hazard calculation
         const form = document.getElementById('upload-observation-form');
         setupFormValidation(form, async (data) => {
-          const hazardPct = calculateHazardProbability({
-            abnormalityPercentage: data.abnormalityPercentage,
-            intensity: data.intensity,
-            animalsAffected: Number(data.animalsShowing) || 1,
-            totalAnimals: Number(data.totalAnimals) || 1,
-            durationMinutes: Number(data.durationMinutes) || 30
-          });
+          const totalAnimals = Number(data.totalAnimals || 0);
+          const animalsShowing = Number(data.animalsShowing || 0);
 
-          await submitObservation({
-            animal: data.animal,
-            observedBehaviour: data.observedBehaviour,
-            abnormalityPercentage: data.abnormalityPercentage,
-            intensity: data.intensity,
-            durationMinutes: data.durationMinutes,
-            hazardProbability: hazardPct
-          });
+          if (animalsShowing > totalAnimals) {
+            showError(document.getElementById('animals-showing'), 'Number of animals showing abnormal behaviour cannot be greater than the total number of animals.');
+            return;
+          }
 
-          modalRiskValue.textContent = hazardPct.toFixed(2) + '%';
-          modal.classList.add('active');
+          try {
+            const intensityValue = Number((data.intensity || '5 - Moderate').split(' ')[0]);
+            const abnormalityPercent = totalAnimals > 0 ? Math.min((animalsShowing / totalAnimals) * 100, 100) : 0;
+            const hazardResponse = await predictHazard({
+              animal: data.animal,
+              behaviour: data.observedBehaviour,
+              intensity: intensityValue,
+              abnormality_percentage: Number(abnormalityPercent.toFixed(0)),
+              duration_minutes: Number(data.durationMinutes || 0)
+            });
+
+            const hazardPct = Number(
+              hazardResponse?.hazard_probability ??
+              hazardResponse?.hazardProbability ??
+              hazardResponse?.probability ??
+              0
+            );
+
+            await submitObservation({
+              keeper_id: user?.keeper_id || user?.badgeId || 'K001',
+              zoo_id: user?.zoo_id || user?.zoo || user?.zooId || 'Z001',
+              animal_name: data.animal,
+              behaviour: data.observedBehaviour,
+              intensity: intensityValue,
+              animal_percentage: Number(abnormalityPercent.toFixed(0)),
+              duration: Number(data.durationMinutes || 0)
+            });
+
+            modalRiskValue.textContent = `${Number.isFinite(hazardPct) ? hazardPct.toFixed(2) : '0.00'}%`;
+            modal.classList.add('active');
+          } catch (error) {
+            console.error('Observation submission error:', error);
+            showError(document.getElementById('observation-intensity'), error.message || 'Unable to submit observation.');
+          }
         });
+
+        updateAbnormalityPercentage();
 
         modalCloseBtn.addEventListener('click', () => {
           modal.classList.remove('active');
