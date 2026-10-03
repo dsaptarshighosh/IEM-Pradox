@@ -14,6 +14,8 @@ function normalizeErrorMessage(payload, fallback) {
     if (typeof payload.detail === 'string') return payload.detail;
     if (Array.isArray(payload.detail)) {
       const first = payload.detail[0];
+      const field = first?.loc?.[first.loc.length - 1];
+      if (first?.msg === 'Field required' && field) return `${field} is required`;
       return first?.msg || first?.message || fallback;
     }
   }

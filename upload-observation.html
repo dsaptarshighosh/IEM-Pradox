@@ -177,6 +177,8 @@
               </div>
             </div>
 
+            <div id="observation-submit-error" class="field-error-msg" role="alert" style="display: none;"></div>
+
             <!-- Form Action Buttons -->
             <div class="form-actions-row">
               <a href="observations.html" class="action-btn" style="background-color: #0ED999;">
@@ -252,7 +254,7 @@
     </main>
 
     <script type="module">
-      import { requireRole, getCurrentUser } from './js/auth.js';
+      import { requireRole } from './js/auth.js';
       import { setupFormValidation, showError, clearError } from './js/forms.js';
       import { predictHazard } from './js/data.js';
       import './js/nav.js';
@@ -265,7 +267,6 @@
         const modalRiskGauge = document.querySelector('.hazard-gauge');
         const modalRiskGaugeNeedle = document.getElementById('hazard-gauge-needle');
         const modalCloseBtn = document.getElementById('modal-close-btn');
-        const user = getCurrentUser();
         const totalAnimalsInput = document.getElementById('total-animals');
         const animalsShowingInput = document.getElementById('animals-showing');
         const abnormalityInput = document.getElementById('abnormality-percentage');
@@ -295,7 +296,9 @@
         });
 
         const form = document.getElementById('upload-observation-form');
+        const submissionError = document.getElementById('observation-submit-error');
         setupFormValidation(form, async (data) => {
+          submissionError.style.display = 'none';
           const totalAnimals = Number(data.totalAnimals || 0);
           const animalsShowing = Number(data.animalsShowing || 0);
 
@@ -308,14 +311,11 @@
             const intensityValue = Number((data.intensity || '5 - Moderate').split(' ')[0]);
             const abnormalityPercent = totalAnimals > 0 ? Math.min((animalsShowing / totalAnimals) * 100, 100) : 0;
             const hazardResponse = await predictHazard({
-              keeper_id: user?.keeper_id || user?.badgeId || 'K001',
-              zoo_id: user?.zoo_id || user?.zoo || user?.zooId || 'Z001',
-              animal_name: data.animal,
+              animal: data.animal,
               behaviour: data.observedBehaviour,
               intensity: intensityValue,
-              animal_percentage: Number(abnormalityPercent.toFixed(0)),
-              duration: Number(data.durationMinutes || 0),
-              date: new Date().toISOString()
+              abnormality_percentage: Number(abnormalityPercent.toFixed(0)),
+              duration_minutes: Number(data.durationMinutes || 0)
             });
 
             const hazardPct = Number(
@@ -333,7 +333,8 @@
             modal.classList.add('active');
           } catch (error) {
             console.error('Observation submission error:', error);
-            showError(document.getElementById('observation-intensity'), error.message || 'Unable to submit observation.');
+            submissionError.textContent = error.message || 'Unable to submit observation.';
+            submissionError.style.display = 'flex';
           }
         });
 
